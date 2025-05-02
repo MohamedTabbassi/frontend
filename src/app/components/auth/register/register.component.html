@@ -1,0 +1,124 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="text-center mb-4">
+              {{ userRole === 'SERVICE_USER' ? 'Inscription Prestataire' : 'Inscription Client' }}
+            </h2>
+            
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+            
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="name" class="form-label">Nom complet</label>
+                  <input
+                    type="text"
+                    formControlName="name"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['name'].errors }"
+                    id="name"
+                  />
+                  <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                    <div *ngIf="f['name'].errors['required']">Nom est requis</div>
+                    <div *ngIf="f['name'].errors['minlength']">Nom doit contenir au moins 3 caractères</div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    formControlName="email"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                    id="email"
+                  />
+                  <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors['required']">Email est requis</div>
+                    <div *ngIf="f['email'].errors['email']">Email doit être une adresse valide</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="password" class="form-label">Mot de passe</label>
+                  <input
+                    type="password"
+                    formControlName="password"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+                    id="password"
+                  />
+                  <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                    <div *ngIf="f['password'].errors['required']">Mot de passe est requis</div>
+                    <div *ngIf="f['password'].errors['minlength']">Mot de passe doit contenir au moins 6 caractères</div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                  <input
+                    type="password"
+                    formControlName="confirmPassword"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }"
+                    id="confirmPassword"
+                  />
+                  <div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
+                    <div *ngIf="f['confirmPassword'].errors['required']">Confirmation du mot de passe est requise</div>
+                    <div *ngIf="f['confirmPassword'].errors['passwordMismatch']">Les mots de passe ne correspondent pas</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="phone" class="form-label">Téléphone</label>
+                  <input
+                    type="tel"
+                    formControlName="phone"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }"
+                    id="phone"
+                    placeholder="+212XXXXXXXXX"
+                  />
+                  <div *ngIf="submitted && f['phone'].errors" class="invalid-feedback">
+                    <div *ngIf="f['phone'].errors['required']">Numéro de téléphone est requis</div>
+                    <div *ngIf="f['phone'].errors['pattern']">Format de téléphone invalide</div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                  <label for="address" class="form-label">Adresse</label>
+                  <input
+                    type="text"
+                    formControlName="address"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['address'].errors }"
+                    id="address"
+                  />
+                  <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
+                    <div *ngIf="f['address'].errors['required']">Adresse est requise</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="d-grid">
+                <button [disabled]="loading" type="submit" class="btn btn-primary btn-lg">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  S'inscrire
+                </button>
+              </div>
+              
+              <div class="text-center mt-4">
+                <p>Vous avez déjà un compte ? <a routerLink="/login">Se connecter</a></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,111 @@
+<div class="service-container">
+    <div class="service-header">
+      <h1>Pièces Automobiles</h1>
+      <p>Trouvez toutes les pièces dont vous avez besoin pour votre véhicule</p>
+    </div>
+  
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+      <div class="search-box">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          placeholder="Rechercher une pièce..." 
+          (keyup.enter)="searchParts()">
+        <button (click)="searchParts()">Rechercher</button>
+      </div>
+      
+      <div class="category-filter">
+        <h3>Filtrer par catégorie</h3>
+        <div class="filter-buttons">
+          <button 
+            [class.active]="selectedCategory === ''" 
+            (click)="filterByCategory('')">
+            Tous
+          </button>
+          <button 
+            *ngFor="let category of partCategories" 
+            [class.active]="selectedCategory === category.id" 
+            (click)="filterByCategory(category.id)">
+            {{ category.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Loading and Error States -->
+    <div *ngIf="loading" class="loading-spinner">
+      Chargement des pièces...
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  
+    <!-- Parts List -->
+    <div *ngIf="!loading && !error" class="parts-list">
+      <h2>Catalogue de pièces</h2>
+      
+      <div *ngIf="autoParts.length === 0" class="no-parts">
+        Aucune pièce disponible pour le moment.
+      </div>
+      
+      <div class="parts-grid">
+        <div *ngFor="let part of autoParts" class="part-card">
+          <div class="part-image" *ngIf="part.imageUrl">
+            <img [src]="part.imageUrl" [alt]="part.name">
+          </div>
+          <div class="part-details">
+            <h3>{{ part.name }}</h3>
+            <p class="part-reference">Réf: {{ part.reference || 'N/A' }}</p>
+            <p class="part-compatibility">Compatible: {{ part.compatibility || 'Universel' }}</p>
+            <p class="part-description">{{ part.description }}</p>
+            <p class="part-price">{{ part.price | currency:'EUR' }}</p>
+            <p class="part-stock" [class.in-stock]="part.inStock" [class.out-of-stock]="!part.inStock">
+              {{ part.inStock ? 'En stock' : 'Rupture de stock' }}
+            </p>
+            <button 
+              class="btn-add-to-cart" 
+              [disabled]="!part.inStock"
+              (click)="addToCart(part)">
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Shopping Cart Summary -->
+    <div class="cart-summary" *ngIf="cart.length > 0">
+      <h2>Votre panier ({{ cart.length }} article{{ cart.length > 1 ? 's' : '' }})</h2>
+      <ul class="cart-items">
+        <li *ngFor="let item of cart">
+          {{ item.name }} - {{ item.price | currency:'EUR' }}
+        </li>
+      </ul>
+      
+  
+    <!-- Additional Information -->
+    <div class="info-section">
+      <h2>Informations sur nos pièces</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Qualité garantie</h3>
+          <p>Toutes nos pièces sont de qualité d'origine ou équivalente, avec une garantie de 12 mois minimum.</p>
+        </div>
+        <div class="info-card">
+          <h3>Livraison rapide</h3>
+          <p>Livraison en 24-48h pour les pièces en stock, et 3-5 jours pour les commandes spéciales.</p>
+        </div>
+        <div class="info-card">
+          <h3>Assistance technique</h3>
+          <p>Notre équipe de techniciens est disponible pour vous aider à choisir les bonnes pièces pour votre véhicule.</p>
+        </div>
+        <div class="info-card">
+          <h3>Retours faciles</h3>
+          <p>Retours acceptés sous 14 jours pour les pièces non utilisées dans leur emballage d'origine.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

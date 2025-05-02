@@ -1,0 +1,226 @@
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Tableau de bord prestataire</h1>
+      <a routerLink="/service-provider/create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Ajouter un service
+      </a>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Services</h6>
+                <h3 class="mb-0">{{ stats.totalServices }}</h3>
+                <small class="text-muted">{{ stats.activeServices }} actifs</small>
+              </div>
+              <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                <i class="bi bi-tools text-primary fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Réservations</h6>
+                <h3 class="mb-0">{{ stats.totalBookings }}</h3>
+                <small class="text-muted">{{ stats.pendingBookings }} en attente</small>
+              </div>
+              <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                <i class="bi bi-calendar-check text-success fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Terminées</h6>
+                <h3 class="mb-0">{{ stats.completedBookings }}</h3>
+                <small class="text-muted">{{ stats.acceptedBookings }} en cours</small>
+              </div>
+              <div class="rounded-circle bg-info bg-opacity-10 p-3">
+                <i class="bi bi-check-circle text-info fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Revenus</h6>
+                <h3 class="mb-0">{{ stats.revenue | currency:'MAD ' }}</h3>
+                <small class="text-muted">Total</small>
+              </div>
+              <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                <i class="bi bi-cash-coin text-warning fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- My Services -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Mes Services</h5>
+            <a routerLink="/service-provider/create" class="btn btn-sm btn-primary">Ajouter un service</a>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="loading.services" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            
+            <div *ngIf="error.services" class="alert alert-danger m-3">
+              {{ error.services }}
+            </div>
+            
+            <div *ngIf="!loading.services && !error.services && services.length === 0" class="text-center py-4">
+              <p class="mb-0">Vous n'avez pas encore ajouté de services</p>
+            </div>
+            
+            <div *ngIf="!loading.services && !error.services && services.length > 0" class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Catégorie</th>
+                    <th>Prix</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let service of services">
+                    <td>
+                      <a [routerLink]="['/services', service._id]" class="text-decoration-none">
+                        {{ service.title }}
+                      </a>
+                    </td>
+                    <td>{{ getCategoryName(service.category) }}</td>
+                    <td>{{ service.price | currency:'MAD ' }}</td>
+                    <td>
+                      <span [class]="service.available ? 'badge bg-success' : 'badge bg-secondary'">
+                        {{ service.available ? 'Disponible' : 'Non disponible' }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="btn-group">
+                        <button 
+                          class="btn btn-sm" 
+                          [ngClass]="service.available ? 'btn-outline-secondary' : 'btn-outline-success'"
+                          (click)="toggleServiceAvailability(service._id, service.available)"
+                        >
+                          {{ service.available ? 'Désactiver' : 'Activer' }}
+                        </button>
+                        <a [routerLink]="['/service-provider/edit', service._id]" class="btn btn-sm btn-outline-primary">
+                          Modifier
+                        </a>
+                        <button 
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="deleteService(service._id)"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Bookings -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Réservations récentes</h5>
+            <a routerLink="/bookings" class="btn btn-sm btn-outline-primary">Voir tout</a>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="loading.bookings" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            
+            <div *ngIf="error.bookings" class="alert alert-danger m-3">
+              {{ error.bookings }}
+            </div>
+            
+            <div *ngIf="!loading.bookings && !error.bookings && bookings.length === 0" class="text-center py-4">
+              <p class="mb-0">Aucune réservation trouvée</p>
+            </div>
+            
+            <div *ngIf="!loading.bookings && !error.bookings && bookings.length > 0" class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Statut</th>
+                    <th>Prix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let booking of bookings.slice(0, 5)">
+                    <td>
+                      <a [routerLink]="['/services', booking.serviceId._id]" class="text-decoration-none">
+                        {{ booking.serviceId.title }}
+                      </a>
+                    </td>
+                    <td>{{ formatDate(booking.bookingDate) }}</td>
+                    <td>{{ booking.clientId.name }}</td>
+                    <td>
+                      <span [class]="'badge ' + (
+                        booking.status === 'PENDING' ? 'bg-warning' : 
+                        booking.status === 'ACCEPTED' ? 'bg-success' : 
+                        booking.status === 'COMPLETED' ? 'bg-info' : 
+                        booking.status === 'REJECTED' ? 'bg-danger' : 
+                        booking.status === 'CANCELLED' ? 'bg-secondary' : 'bg-primary'
+                      )">
+                        {{ 
+                          booking.status === 'PENDING' ? 'En attente' : 
+                          booking.status === 'ACCEPTED' ? 'Acceptée' : 
+                          booking.status === 'COMPLETED' ? 'Terminée' : 
+                          booking.status === 'REJECTED' ? 'Rejetée' : 
+                          booking.status === 'CANCELLED' ? 'Annulée' : booking.status 
+                        }}
+                      </span>
+                    </td>
+                    <td>{{ booking.serviceId.price | currency:'MAD ' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

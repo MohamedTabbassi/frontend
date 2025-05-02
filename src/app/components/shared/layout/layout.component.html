@@ -1,0 +1,18 @@
+<div class="app-container" [class.sidebar-expanded]="isSidebarVisible">
+    <!-- Sidebar (only shown when authenticated) -->
+    <app-sidebar *ngIf="authService.isLoggedIn()"></app-sidebar>
+    
+    <!-- Main content area -->
+    <div class="main-content" [class.with-sidebar]="authService.isLoggedIn() && isSidebarVisible">
+      <!-- Header -->
+      <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+      
+      <!-- Page content -->
+      <div class="page-content">
+        <router-outlet></router-outlet>
+      </div>
+      
+      <!-- Footer -->
+      <app-footer></app-footer>
+    </div>
+  </div>

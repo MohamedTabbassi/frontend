@@ -1,0 +1,105 @@
+<div class="sidebar" [class.collapsed]="!isExpanded">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <a routerLink="/" class="logo">
+          <i class="bi bi-car-front-fill"></i>
+          <span *ngIf="isExpanded">Auto Services</span>
+        </a>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="bi" [ngClass]="isExpanded ? 'bi-chevron-left' : 'bi-chevron-right'"></i>
+      </button>
+    </div>
+    
+    <div class="sidebar-content">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+            <i class="bi bi-speedometer2"></i>
+            <span *ngIf="isExpanded">Tableau de bord</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/services" routerLinkActive="active">
+            <i class="bi bi-tools"></i>
+            <span *ngIf="isExpanded">Services</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/bookings" routerLinkActive="active">
+            <i class="bi bi-calendar-check"></i>
+            <span *ngIf="isExpanded">Réservations</span>
+          </a>
+        </li>
+        
+        <!-- Service Provider specific menu items -->
+        <ng-container *ngIf="isServiceProvider()">
+          <li class="nav-divider" *ngIf="isExpanded">
+            <span>Espace Prestataire</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/service-provider" routerLinkActive="active">
+              <i class="bi bi-shop"></i>
+              <span *ngIf="isExpanded">Mes Services</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/service-provider/create" routerLinkActive="active">
+              <i class="bi bi-plus-circle"></i>
+              <span *ngIf="isExpanded">Ajouter un service</span>
+            </a>
+          </li>
+        </ng-container>
+        
+        <!-- Admin specific menu items -->
+        <ng-container *ngIf="isAdmin()">
+          <li class="nav-divider" *ngIf="isExpanded">
+            <span>Administration</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+              <i class="bi bi-gear"></i>
+              <span *ngIf="isExpanded">Tableau Admin</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
+              <i class="bi bi-people"></i>
+              <span *ngIf="isExpanded">Utilisateurs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/services" routerLinkActive="active">
+              <i class="bi bi-list-check"></i>
+              <span *ngIf="isExpanded">Services</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/bookings" routerLinkActive="active">
+              <i class="bi bi-calendar-week"></i>
+              <span *ngIf="isExpanded">Réservations</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    
+    <div class="sidebar-footer">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile" routerLinkActive="active">
+            <i class="bi bi-person-circle"></i>
+            <span *ngIf="isExpanded">Mon Profil</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" (click)="$event.preventDefault(); ">
+            <i class="bi bi-box-arrow-right"></i>
+            <span *ngIf="isExpanded">Déconnexion</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>

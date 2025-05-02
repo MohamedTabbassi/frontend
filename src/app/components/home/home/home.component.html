@@ -1,0 +1,94 @@
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <section class="bg-primary bg-gradient text-white py-5">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h1 class="display-4 fw-bold mb-4">Tous vos services automobiles en un seul endroit</h1>
+            <p class="lead mb-4">Trouvez des services de remorquage, mécanique, pièces auto et location de voitures facilement et rapidement.</p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+              <a routerLink="/services" class="btn btn-light btn-lg px-4">Découvrir les services</a>
+              <a routerLink="/register" class="btn btn-outline-light btn-lg px-4">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Services Section -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Nos Services</h2>
+          <p class="lead text-muted">Découvrez notre gamme complète de services automobiles</p>
+        </div>
+        
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm text-center">
+              <div class="card-body p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                  <i class="bi bi-truck fs-1 text-primary"></i>
+                </div>
+                <h3 class="card-title h5">Remorquage</h3>
+                <p class="card-text">Service de dépannage et remorquage disponible 24/7</p>
+                <a routerLink="/remorquage" [queryParams]="{category: 'REMORQUAGE'}" class="btn btn-outline-primary mt-2">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm text-center">
+              <div class="card-body p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                  <i class="bi bi-tools fs-1 text-primary"></i>
+                </div>
+                <h3 class="card-title h5">Mécanique</h3>
+                <p class="card-text">Réparations et entretien par des professionnels qualifiés</p>
+                <a routerLink="/MECANIQUE" [queryParams]="{category: 'MECANIQUE'}" class="btn btn-outline-primary mt-2">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm text-center">
+              <div class="card-body p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                  <i class="bi bi-box-seam fs-1 text-primary"></i>
+                </div>
+                <h3 class="card-title h5">Pièces Auto</h3>
+                <p class="card-text">Large gamme de pièces détachées pour tous véhicules</p>
+                <a routerLink="/piece-auto" [queryParams]="{category: 'PIECE_AUTO'}" class="btn btn-outline-primary mt-2">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm text-center">
+              <div class="card-body p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                  <i class="bi bi-car-front fs-1 text-primary"></i>
+                </div>
+                <h3 class="card-title h5">Location</h3>
+                <p class="card-text">Location de véhicules à court et long terme</p>
+                <a routerLink="/location" [queryParams]="{category: 'LOCATION_VOITURE'}" class="btn btn-outline-primary mt-2">Voir plus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- CTA Section -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h2 class="fw-bold mb-3">Vous êtes un professionnel de l'automobile ?</h2>
+            <p class="lead text-muted mb-4">Rejoignez notre plateforme et proposez vos services à des milliers de clients potentiels.</p>
+            <a routerLink="/register" [queryParams]="{role: 'service_user'}" class="btn btn-primary btn-lg px-4">Devenir prestataire</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>

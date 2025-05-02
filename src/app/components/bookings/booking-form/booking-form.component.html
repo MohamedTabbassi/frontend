@@ -1,0 +1,45 @@
+<div class="booking-form">
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+    
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="bookingDate" class="form-label">Date de réservation</label>
+        <input 
+          type="date" 
+          formControlName="bookingDate" 
+          class="form-control" 
+          [ngClass]="{ 'is-invalid': submitted && f['bookingDate'].errors }" 
+          id="bookingDate"
+        >
+        <div *ngIf="submitted && f['bookingDate'].errors" class="invalid-feedback">
+          <div *ngIf="f['bookingDate'].errors['required']">La date est requise</div>
+          <div *ngIf="f['bookingDate'].errors['dateMin']">La date doit être à partir de demain</div>
+          <div *ngIf="f['bookingDate'].errors['dateMax']">La date ne peut pas dépasser 3 mois</div>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="notes" class="form-label">Notes (optionnel)</label>
+        <textarea 
+          formControlName="notes" 
+          class="form-control" 
+          id="notes" 
+          rows="3" 
+          placeholder="Informations supplémentaires pour le prestataire..."
+        ></textarea>
+      </div>
+      
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span>Prix:</span>
+        <span class="fw-bold">{{ servicePrice | currency:'MAD ' }}</span>
+      </div>
+      
+      <div class="d-grid">
+        <button [disabled]="loading" type="submit" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Confirmer la réservation
+        </button>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,92 @@
+<div class="service-container">
+    <div class="service-header">
+      <h1>Services de Remorquage</h1>
+      <p>Assistance routière 24/7 pour tous types de véhicules</p>
+    </div>
+  
+    <!-- Emergency Towing Request Section -->
+    <div class="emergency-section">
+      <h2>Besoin d'un remorquage d'urgence?</h2>
+      <div class="emergency-form">
+        <form (ngSubmit)="requestEmergencyTowing()">
+          <div class="form-group">
+            <label for="location">Votre localisation</label>
+            <input type="text" id="location" name="location" [(ngModel)]="emergencyRequest.location" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="vehicleType">Type de véhicule</label>
+            <select id="vehicleType" name="vehicleType" [(ngModel)]="emergencyRequest.vehicleType" required>
+              <option value="">Sélectionnez</option>
+              <option value="car">Voiture</option>
+              <option value="motorcycle">Moto</option>
+              <option value="truck">Camion</option>
+              <option value="other">Autre</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="description">Description du problème</label>
+            <textarea id="description" name="description" [(ngModel)]="emergencyRequest.description" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="contactNumber">Numéro de téléphone</label>
+            <input type="tel" id="contactNumber" name="contactNumber" [(ngModel)]="emergencyRequest.contactNumber" required>
+          </div>
+          
+          <button type="submit" class="btn-emergency">Demander un remorquage d'urgence</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Loading and Error States -->
+    <div *ngIf="loading" class="loading-spinner">
+      Chargement des services...
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  
+    <!-- Services List -->
+    <div *ngIf="!loading && !error" class="services-list">
+      <h2>Nos services de remorquage</h2>
+      
+      <div *ngIf="towingServices.length === 0" class="no-services">
+        Aucun service de remorquage disponible pour le moment.
+      </div>
+      
+      <div *ngFor="let service of towingServices" class="service-card">
+        <div class="service-image" *ngIf="service.imageUrl">
+          <img [src]="service.imageUrl" [alt]="service.name">
+        </div>
+        <div class="service-details">
+          <h3>{{ service.name }}</h3>
+          <p class="service-description">{{ service.description }}</p>
+          <p class="service-price">{{ service.price | currency:'EUR' }}</p>
+          <button class="btn-book" [routerLink]="['/booking', service.id]">Réserver</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Additional Information -->
+    <div class="info-section">
+      <h2>Pourquoi choisir notre service de remorquage?</h2>
+      <div class="info-cards">
+        <div class="info-card">
+          <h3>Disponible 24/7</h3>
+          <p>Notre équipe est disponible jour et nuit pour vous assister en cas d'urgence.</p>
+        </div>
+        <div class="info-card">
+          <h3>Rapide et fiable</h3>
+          <p>Temps de réponse rapide et service professionnel pour tous types de véhicules.</p>
+        </div>
+        <div class="info-card">
+          <h3>Couverture nationale</h3>
+          <p>Service disponible dans toutes les régions du pays.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

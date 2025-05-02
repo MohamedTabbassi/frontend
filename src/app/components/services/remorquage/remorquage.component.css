@@ -1,0 +1,202 @@
+.service-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .service-header {
+    text-align: center;
+    margin-bottom: 40px;
+    
+    h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      color: #7f8c8d;
+    }
+  }
+  
+  .emergency-section {
+    background-color: #f8d7da;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    
+    h2 {
+      color: #721c24;
+      margin-bottom: 20px;
+    }
+    
+    .emergency-form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      
+      .form-group {
+        margin-bottom: 15px;
+        
+        label {
+          display: block;
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+        
+        input, select, textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+        }
+        
+        textarea {
+          height: 100px;
+        }
+      }
+      
+      .btn-emergency {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+  }
+  
+  .loading-spinner {
+    text-align: center;
+    padding: 30px;
+    font-size: 1.2rem;
+    color: #6c757d;
+  }
+  
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .services-list {
+    margin-bottom: 40px;
+    
+    h2 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    
+    .no-services {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    .service-card {
+      display: flex;
+      margin-bottom: 20px;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+      
+      .service-image {
+        flex: 0 0 30%;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+          height: 200px;
+        }
+      }
+      
+      .service-details {
+        flex: 1;
+        padding: 20px;
+        
+        h3 {
+          margin-top: 0;
+          color: #2c3e50;
+        }
+        
+        .service-description {
+          margin-bottom: 15px;
+          color: #7f8c8d;
+        }
+        
+        .service-price {
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: #2c3e50;
+          margin-bottom: 15px;
+        }
+        
+        .btn-book {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          
+          &:hover {
+            background-color: #2980b9;
+          }
+        }
+      }
+    }
+  }
+  
+  .info-section {
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+    
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      
+      .info-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        
+        h3 {
+          color: #3498db;
+          margin-top: 0;
+        }
+        
+        p {
+          color: #7f8c8d;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,170 @@
+<div class="service-container">
+    <div class="service-header">
+      <h1>Location de Véhicules</h1>
+      <p>Trouvez le véhicule idéal pour tous vos besoins</p>
+    </div>
+  
+    <!-- Search Form -->
+    <div class="search-section">
+      <h2>Rechercher un véhicule</h2>
+      <div class="search-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Date de début</label>
+            <input type="date" id="startDate" name="startDate" [(ngModel)]="searchParams.startDate">
+          </div>
+          
+          <div class="form-group">
+            <label for="endDate">Date de fin</label>
+            <input type="date" id="endDate" name="endDate" [(ngModel)]="searchParams.endDate">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vehicleType">Type de véhicule</label>
+            <select id="vehicleType" name="vehicleType" [(ngModel)]="searchParams.vehicleType">
+              <option value="">Tous les types</option>
+              <option *ngFor="let type of vehicleTypes" [value]="type.id">{{ type.name }}</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="location">Lieu de prise en charge</label>
+            <select id="location" name="location" [(ngModel)]="searchParams.location">
+              <option value="">Tous les lieux</option>
+              <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
+            </select>
+          </div>
+        </div>
+        
+        <button class="btn-search" (click)="searchVehicles()">Rechercher</button>
+      </div>
+    </div>
+  
+    <!-- Loading and Error States -->
+    <div *ngIf="loading" class="loading-spinner">
+      Chargement des véhicules...
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  
+    <!-- Vehicle List -->
+    <div *ngIf="!loading && !error" class="vehicles-list">
+      <h2>Véhicules disponibles</h2>
+      
+      <div *ngIf="rentalVehicles.length === 0" class="no-vehicles">
+        Aucun véhicule disponible pour les critères sélectionnés.
+      </div>
+      
+      <div *ngFor="let vehicle of rentalVehicles" class="vehicle-card" [class.selected]="selectedVehicle === vehicle" (click)="selectVehicle(vehicle)">
+        <div class="vehicle-image" *ngIf="vehicle.imageUrl">
+          <img [src]="vehicle.imageUrl" [alt]="vehicle.name">
+        </div>
+        <div class="vehicle-details">
+          <h3>{{ vehicle.name }}</h3>
+          <div class="vehicle-specs">
+            <div class="spec">
+              <span class="spec-label">Catégorie:</span>
+              <span class="spec-value">{{ vehicle.category }}</span>
+            </div>
+            <div class="spec">
+              <span class="spec-label">Places:</span>
+              <span class="spec-value">{{ vehicle.seats }}</span>
+            </div>
+            <div class="spec">
+              <span class="spec-label">Transmission:</span>
+              <span class="spec-value">{{ vehicle.transmission }}</span>
+            </div>
+            <div class="spec">
+              <span class="spec-label">Carburant:</span>
+              <span class="spec-value">{{ vehicle.fuelType }}</span>
+            </div>
+          </div>
+          <div class="vehicle-features" *ngIf="vehicle.features && vehicle.features.length">
+            <h4>Équipements</h4>
+            <ul>
+              <li *ngFor="let feature of vehicle.features">{{ feature }}</li>
+            </ul>
+          </div>
+          <div class="vehicle-pricing">
+            <p class="price">{{ vehicle.pricePerDay | currency:'EUR' }} / jour</p>
+            <p class="total-price" *ngIf="searchParams.startDate && searchParams.endDate">
+              Total: {{ calculateTotalPrice(vehicle) | currency:'EUR' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Booking Section -->
+    <div *ngIf="selectedVehicle" class="booking-section">
+      <h2>Réserver ce véhicule</h2>
+      <div class="booking-details">
+        <div class="selected-vehicle">
+          <h3>{{ selectedVehicle.name }}</h3>
+          <p class="price">{{ selectedVehicle.pricePerDay | currency:'EUR' }} / jour</p>
+          <p class="total-price" *ngIf="searchParams.startDate && searchParams.endDate">
+            Total: {{ calculateTotalPrice(selectedVehicle) | currency:'EUR' }}
+          </p>
+        </div>
+        <div class="booking-dates">
+          <div *ngIf="!searchParams.startDate || !searchParams.endDate" class="date-warning">
+            Veuillez sélectionner les dates de location pour continuer.
+          </div>
+          <div *ngIf="searchParams.startDate && searchParams.endDate">
+            <p><strong>Du:</strong> {{ searchParams.startDate | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Au:</strong> {{ searchParams.endDate | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+        <button class="btn-book" (click)="bookVehicle()" [disabled]="!searchParams.startDate || !searchParams.endDate">
+          Réserver maintenant
+        </button>
+      </div>
+    </div>
+  
+    <!-- Rental Information -->
+    <div class="rental-info">
+      <h2>Informations de location</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Documents requis</h3>
+          <ul>
+            <li>Permis de conduire valide</li>
+            <li>Pièce d'identité</li>
+            <li>Carte de crédit au nom du conducteur</li>
+            <li>Justificatif de domicile (pour certains véhicules)</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Conditions de location</h3>
+          <ul>
+            <li>Âge minimum: 21 ans</li>
+            <li>Permis obtenu depuis au moins 2 ans</li>
+            <li>Caution requise à la prise du véhicule</li>
+            <li>Kilométrage illimité sur certains véhicules</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Assurances</h3>
+          <ul>
+            <li>Assurance de base incluse</li>
+            <li>Options d'assurance supplémentaires disponibles</li>
+            <li>Protection contre le vol</li>
+            <li>Assistance routière 24/7</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Politique d'annulation</h3>
+          <ul>
+            <li>Annulation gratuite jusqu'à 48h avant la prise en charge</li>
+            <li>Frais d'annulation de 50% entre 24h et 48h</li>
+            <li>Aucun remboursement pour annulation à moins de 24h</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  

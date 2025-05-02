@@ -1,0 +1,187 @@
+<div class="container py-5">
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h1 class="mb-3">Tableau de bord</h1>
+        <p class="lead">Bienvenue, {{ userName }}</p>
+      </div>
+    </div>
+  
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Réservations</h6>
+                <h3 class="mb-0">{{ stats.totalBookings }}</h3>
+              </div>
+              <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                <i class="bi bi-calendar-check text-primary fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">En attente</h6>
+                <h3 class="mb-0">{{ stats.pendingBookings }}</h3>
+              </div>
+              <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                <i class="bi bi-hourglass-split text-warning fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Terminées</h6>
+                <h3 class="mb-0">{{ stats.completedBookings }}</h3>
+              </div>
+              <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                <i class="bi bi-check-circle text-success fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="isServiceProvider()" class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Services</h6>
+                <h3 class="mb-0">{{ stats.totalServices }}</h3>
+              </div>
+              <div class="rounded-circle bg-info bg-opacity-10 p-3">
+                <i class="bi bi-tools text-info fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="isClient()" class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Favoris</h6>
+                <h3 class="mb-0">0</h3>
+              </div>
+              <div class="rounded-circle bg-danger bg-opacity-10 p-3">
+                <i class="bi bi-heart text-danger fs-4"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Recent Bookings -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Réservations récentes</h5>
+            <a routerLink="/bookings" class="btn btn-sm btn-outline-primary">Voir tout</a>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="loading.bookings" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            
+            <div *ngIf="!loading.bookings && recentBookings.length === 0" class="text-center py-4">
+              <p class="mb-0">Aucune réservation trouvée</p>
+            </div>
+            
+            <div *ngIf="!loading.bookings && recentBookings.length > 0" class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>{{ isServiceProvider() ? 'Client' : 'Prestataire' }}</th>
+                    <th>Statut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let booking of recentBookings">
+                    <td>
+                      <a [routerLink]="['/services', booking.serviceId._id]" class="text-decoration-none">
+                        {{ booking.serviceId.title }}
+                      </a>
+                    </td>
+                    <td>{{ formatDate(booking.bookingDate) }}</td>
+                    <td>
+                      {{ isServiceProvider() ? booking.clientId.name : booking.serviceId.userId.name }}
+                    </td>
+                    <td>
+                      <span [class]="'badge ' + getStatusBadgeClass(booking.status)">
+                        {{ getStatusText(booking.status) }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Quick Actions -->
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+              <i class="bi bi-search fs-1 text-primary"></i>
+            </div>
+            <h3 class="card-title h5">Trouver des Services</h3>
+            <p class="card-text">Découvrez de nouveaux services automobiles</p>
+            <a routerLink="/services" class="btn btn-primary mt-2">Explorer les services</a>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="isServiceProvider()" class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+              <i class="bi bi-plus-circle fs-1 text-primary"></i>
+            </div>
+            <h3 class="card-title h5">Ajouter un Service</h3>
+            <p class="card-text">Proposez un nouveau service</p>
+            <a routerLink="/service-provider/create" class="btn btn-primary mt-2">Ajouter un service</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+              <i class="bi bi-person fs-1 text-primary"></i>
+            </div>
+            <h3 class="card-title h5">Mon Profil</h3>
+            <p class="card-text">Gérez vos informations personnelles</p>
+            <a routerLink="/profile" class="btn btn-primary mt-2">Voir mon profil</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

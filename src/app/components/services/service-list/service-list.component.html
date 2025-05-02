@@ -1,0 +1,103 @@
+<div class="container py-5">
+  <!-- Header with search -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h2>Services Automobiles</h2>
+      <p class="lead mb-0">Tous les services disponibles</p>
+    </div>
+    <div class="input-group mt-3 mt-md-0" style="max-width: 300px;">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Rechercher..." 
+        [(ngModel)]="searchTerm" 
+        (keyup.enter)="search()"
+      />
+      <button class="btn btn-primary" (click)="search()">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </div>
+
+  
+  <!-- Category filters -->
+<div class="mb-4 d-flex flex-wrap gap-2">
+  <button 
+    class="btn" 
+    [ngClass]="selectedCategory === '' ? 'btn-primary' : 'btn-outline-primary'"
+    (click)="filterByCategory('')"
+  >Tous</button>
+
+  <a 
+    class="btn" 
+    [ngClass]="selectedCategory === ServiceCategory.REMORQUAGE ? 'btn-primary' : 'btn-outline-primary'"
+    (click)="filterByCategory(ServiceCategory.REMORQUAGE)"
+    href="/remorquage"
+  >
+    Remorquage
+  </a>
+
+  <a 
+    class="btn" 
+    [ngClass]="selectedCategory === ServiceCategory.MECANIQUE ? 'btn-primary' : 'btn-outline-primary'"
+    (click)="filterByCategory(ServiceCategory.MECANIQUE)"
+    href="/MECANIQUE"
+  >
+    Mécanique
+  </a>
+
+  <a 
+    class="btn" 
+    [ngClass]="selectedCategory === ServiceCategory.PIECE_AUTO ? 'btn-primary' : 'btn-outline-primary'"
+    (click)="filterByCategory(ServiceCategory.PIECE_AUTO)"
+    href="/piece-auto"
+  >
+    Pièces Auto
+  </a>
+
+  <a 
+    class="btn" 
+    [ngClass]="selectedCategory === ServiceCategory.LOCATION_VOITURE ? 'btn-primary' : 'btn-outline-primary'"
+    (click)="filterByCategory(ServiceCategory.LOCATION_VOITURE)"
+    href="/location"
+  >
+    Location
+  </a>
+</div>
+
+
+  <!-- Error message -->
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Service cards -->
+  <ng-container *ngIf="!loading && !error">
+    <div *ngIf="services.length === 0" class="text-center py-5">
+      <p class="lead">Aucun service trouvé</p>
+    </div>
+
+    <div *ngIf="services.length > 0" class="row g-4">
+      <div *ngFor="let service of services" class="col-md-6 col-lg-4">
+        <app-service-card></app-service-card>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4" *ngIf="services.length > 0">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="#" (click)="$event.preventDefault(); changePage(currentPage - 1)">Précédent</a>
+        </li>
+        <li 
+          *ngFor="let page of getPageNumbers()" 
+          class="page-item" 
+          [class.active]="page === currentPage"
+        >
+          <a class="page-link" href="#" (click)="$event.preventDefault(); changePage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" href="#" (click)="$event.preventDefault(); changePage(currentPage + 1)">Suivant</a>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+</div>

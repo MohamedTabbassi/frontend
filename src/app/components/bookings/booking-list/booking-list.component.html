@@ -1,0 +1,131 @@
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>{{ isServiceProvider() ? 'Réservations reçues' : 'Mes Réservations' }}</h1>
+      <a routerLink="/services" class="btn btn-outline-primary">
+        <i class="bi bi-plus-circle me-2"></i>Trouver des services
+      </a>
+    </div>
+    
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+    
+    <div *ngIf="!loading && !error">
+      <div *ngIf="bookings.length === 0" class="text-center py-5">
+        <div class="mb-4">
+          <i class="bi bi-calendar-x fs-1 text-muted"></i>
+        </div>
+        <p class="lead">Vous n'avez pas encore de réservations</p>
+        <a routerLink="/services" class="btn btn-primary">Découvrir les services</a>
+      </div>
+      
+      <div *ngIf="bookings.length > 0" class="row">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>{{ isServiceProvider() ? 'Client' : 'Prestataire' }}</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let booking of bookings">
+                    <td>
+                      <a [routerLink]="['/services', booking.serviceId._id]" class="text-decoration-none">
+                        {{ booking.serviceId.title }}
+                      </a>
+                    </td>
+                    <td>{{ formatDate(booking.bookingDate) }}</td>
+                    <td>
+                      {{ isServiceProvider() ? booking.clientId.name : booking.serviceId.userId.name }}
+                    </td>
+                    <td>
+                      <span [class]="'badge ' + getStatusBadgeClass(booking.status)">
+                        {{ getStatusText(booking.status) }}
+                      </span>
+                    </td>
+                    <td>
+                      <!-- Client actions -->
+                      <div *ngIf="isClient()">
+                        <button 
+                          *ngIf="booking.status === 'PENDING'" 
+                          class="btn btn-sm btn-outline-danger me-2"
+                          (click)="cancelBooking(booking._id)"
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                      
+                      <!-- Service provider actions -->
+                      <div *ngIf="isServiceProvider()">
+                        <div *ngIf="booking.status === 'PENDING'" class="btn-group">
+                          <button 
+                            class="btn btn-sm btn-success me-2"
+                            (click)="acceptBooking(booking._id)"
+                          >
+                            Accepter
+                          </button>
+                          <button 
+                            class="btn btn-sm btn-danger"
+                            (click)="rejectBooking(booking._id)"
+                          >
+                            Rejeter
+                          </button>
+                        </div>
+                        
+                        <button 
+                          *ngIf="booking.status === 'ACCEPTED'" 
+                          class="btn btn-sm btn-info"
+                          (click)="completeBooking(booking._id)"
+                        >
+                          Marquer comme terminé
+                        </button>
+                      </div>
+                      
+                      <!-- Admin actions -->
+                      <div *ngIf="isAdmin()">
+                        <div class="btn-group">
+                          <button 
+                            *ngIf="booking.status === 'PENDING'" 
+                            class="btn btn-sm btn-success me-2"
+                            (click)="acceptBooking(booking._id)"
+                          >
+                            Accepter
+                          </button>
+                          <button 
+                            *ngIf="booking.status === 'PENDING'" 
+                            class="btn btn-sm btn-danger me-2"
+                            (click)="rejectBooking(booking._id)"
+                          >
+                            Rejeter
+                          </button>
+                          <button 
+                            *ngIf="booking.status === 'ACCEPTED'" 
+                            class="btn btn-sm btn-info"
+                            (click)="completeBooking(booking._id)"
+                          >
+                            Terminer
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
