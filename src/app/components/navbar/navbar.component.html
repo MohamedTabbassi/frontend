@@ -1,1 +1,103 @@
-<p>navbar works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+      <a class="navbar-brand" routerLink="/">
+        <i class="bi bi-car-front me-2"></i>
+        Auto Services
+      </a>
+      
+      <button class="navbar-toggler" type="button" (click)="toggleMenu()" 
+              aria-controls="navbarNav" [attr.aria-expanded]="isMenuOpen" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" [class.show]="isMenuOpen" id="navbarNav">
+        <!-- Main Navigation -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              Accueil
+            </a>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false">
+              Services
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+              <li><a class="dropdown-item" routerLink="/services">Tous les services</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="/remorquage">Remorquage</a></li>
+              <li><a class="dropdown-item" routerLink="/mecanique">Mécanique</a></li>
+              <li><a class="dropdown-item" routerLink="/piece-auto">Pièces Auto</a></li>
+              <li><a class="dropdown-item" routerLink="/location">Location</a></li>
+            </ul>
+          </li>
+          
+          <!-- Authenticated User Navigation -->
+          <ng-container *ngIf="authService.isLoggedIn()">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/bookings" routerLinkActive="active">
+                Réservations
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="isServiceProvider()">
+              <a class="nav-link" routerLink="/service-provider" routerLinkActive="active">
+                Espace Prestataire
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="isAdmin()">
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+                Administration
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+        
+        <!-- Auth Navigation -->
+        <ul class="navbar-nav">
+          <ng-container *ngIf="!authService.isLoggedIn(); else userMenu">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login" routerLinkActive="active">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/register" routerLinkActive="active">
+                <i class="bi bi-person-plus me-1"></i> S'inscrire
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-light" routerLink="/register" [queryParams]="{role: 'service_user'}">
+                Devenir prestataire
+              </a>
+            </li>
+          </ng-container>
+          
+          <ng-template #userMenu>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i>
+                {{ authService.currentUserValue?.name || 'Mon compte' }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" routerLink="/dashboard">
+                  <i class="bi bi-speedometer2 me-2"></i> Tableau de bord
+                </a></li>
+                <li><a class="dropdown-item" routerLink="/profile">
+                  <i class="bi bi-person me-2"></i> Mon profil
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" (click)="$event.preventDefault(); logout()">
+                  <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
+                </a></li>
+              </ul>
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
+  </nav>

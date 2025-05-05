@@ -1,111 +1,102 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Router } from '@angular/router';
-import { environment } from '../environments/environment';
-import { User, UserRole } from '../models/user.model';
-import { isPlatformBrowser } from '@angular/common';
-
-interface AuthResponse {
-  token: string;
-  user: User;
-}
-
-interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-interface RegisterRequest {
-  name: string;
-  email: string;
-  password: string;
-  role?: UserRole;
-  phone?: string;
-  address?: string;
-}
+import { Injectable } from "@angular/core"
+import  { HttpClient } from "@angular/common/http"
+import { BehaviorSubject, type Observable, throwError } from "rxjs"
+import { tap, catchError } from "rxjs/operators"
+import  { Router } from "@angular/router"
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User | null>;
-  public currentUser: Observable<User | null>;
-  private apiUrl = `${environment.apiUrl}/auth`;
-  private isBrowser: boolean;
+  private apiUrl = "http://localhost:5000" // Replace with your API URL
+  private currentUserSubject: BehaviorSubject<any>
+  public currentUser$: Observable<any>
+  private isAuthenticatedSubject: BehaviorSubject<boolean>
+  public isAuthenticated$: Observable<boolean>
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) platformId: Object
   ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-    let storedUser = null;
-    
-    // Only access localStorage in the browser
-    if (this.isBrowser) {
-      storedUser = localStorage.getItem('currentUser');
+    this.currentUserSubject = new BehaviorSubject<any>(this.getUserFromLocalStorage())
+    this.currentUser$ = this.currentUserSubject.asObservable()
+    this.isAuthenticatedSubject = new BehaviorSubject<boolean>(this.getToken() ? true : false)
+    this.isAuthenticated$ = this.isAuthenticatedSubject.asObservable()
+  }
+
+  public get currentUserValue() {
+    return this.currentUserSubject.value
+  }
+
+  getToken() {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("token")
     }
-    
-    this.currentUserSubject = new BehaviorSubject<User | null>(
-      storedUser ? JSON.parse(storedUser) : null
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
+    return null
   }
 
-  public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
-  }
-
-  login(loginRequest: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginRequest)
-      .pipe(
-        tap(response => {
-          // Store user details and token in local storage (only in browser)
-          if (this.isBrowser) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-          }
-          this.currentUserSubject.next(response.user);
-        })
-      );
-  }
-
-  register(registerRequest: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerRequest)
-      .pipe(
-        tap(response => {
-          // Store user details and token in local storage (only in browser)
-          if (this.isBrowser) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-          }
-          this.currentUserSubject.next(response.user);
-        })
-      );
-  }
-
-  logout(): void {
-    // Remove user from local storage (only in browser)
-    if (this.isBrowser) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('currentUser');
+  getUserFromLocalStorage() {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user")
+      return user ? JSON.parse(user) : null
     }
-    this.currentUserSubject.next(null);
-    this.router.navigate(['/login']);
+    return null
+  }
+
+  // Add the autoLogin method that was missing
+  autoLogin() {
+    const token = this.getToken()
+    const user = this.getUserFromLocalStorage()
+
+    if (token && user) {
+      this.currentUserSubject.next(user)
+      this.isAuthenticatedSubject.next(true)
+    }
+  }
+
+  // Check if user is authenticated
+  isAuthenticated(): boolean {
+    return !!this.getToken()
+  }
+
+  login(email: string, password: string) {
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, { email, password }).pipe(
+      tap((response) => {
+        // Store token in localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", response.token)
+          localStorage.setItem("user", JSON.stringify(response.user))
+        }
+        this.currentUserSubject.next(response.user)
+        this.isAuthenticatedSubject.next(true)
+      }),
+      catchError((error) => {
+        console.error("Login failed:", error)
+        return throwError(() => new Error(error.error?.message || "Login failed. Please try again."))
+      }),
+    )
+  }
+
+  register(userData: any) {
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, userData).pipe(
+      catchError((error) => {
+        console.error("Registration failed:", error)
+        return throwError(() => new Error(error.error?.message || "Registration failed. Please try again."))
+      }),
+    )
+  }
+
+  logout() {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+    }
+    this.currentUserSubject.next(null)
+    this.isAuthenticatedSubject.next(false)
+    this.router.navigate(["/login"])
   }
 
   isLoggedIn(): boolean {
-    if (!this.isBrowser) {
-      return false; // Always return false on server
-    }
-    return !!this.currentUserValue && !!localStorage.getItem('token');
-  }
-
-  getToken(): string | null {
-    if (!this.isBrowser) {
-      return null;
-    }
-    return localStorage.getItem('token');
+    return !!this.getToken()
   }
 }

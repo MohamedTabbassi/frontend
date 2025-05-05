@@ -1,68 +1,57 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
+import { Component, type OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { FormsModule } from "@angular/forms"
+import {  Router, RouterModule } from "@angular/router"
+import  { AuthService } from "../../../services/auth.service"
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
 })
-export class LoginComponent {
-  
-  loginForm: FormGroup;
-  loading = false;
-  submitted = false;
-  error = '';
-  returnUrl: string;
+export class LoginComponent implements OnInit {
+  loginData = {
+    email: "",
+    password: "",
+  }
+  loading = false
+  errorMessage = ""
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
+    private authService: AuthService,
     private router: Router,
-    private authService: AuthService
-  ) {
-    // Redirect if already logged in
-    if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
+  ) {}
+
+  ngOnInit(): void {
+    // Check if user is already logged in
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(["/"])
     }
-
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-
-    // Get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  // Convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
-
   onSubmit(): void {
-    this.submitted = true;
+    this.loading = true
+    this.errorMessage = ""
 
-    // Stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
+    // Validate form
+    if (!this.loginData.email || !this.loginData.password) {
+      this.errorMessage = "Veuillez remplir tous les champs."
+      this.loading = false
+      return
     }
 
-    this.loading = true;
-    this.authService.login({
-      email: this.f['email'].value,
-      password: this.f['password'].value
+    this.authService.login(this.loginData.email, this.loginData.password).subscribe({
+      next: () => {
+        this.loading = false
+        this.router.navigate(["/"])
+      },
+      error: (error) => {
+        this.loading = false
+        this.errorMessage = error.message || "Échec de la connexion. Veuillez vérifier vos identifiants."
+        console.error("Login error:", error)
+      },
     })
-      .subscribe({
-        next: () => {
-          this.router.navigate([this.returnUrl]);
-        },
-        error: (error) => {
-          this.error = error.error?.message || 'Login failed';
-          this.loading = false;
-        }
-      });
   }
 }

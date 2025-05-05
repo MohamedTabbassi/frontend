@@ -1,56 +1,64 @@
 <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4 p-md-5">
-            <h2 class="text-center mb-4">Connexion</h2>
-            
-            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-            
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input
-                  type="email"
-                  formControlName="email"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
-                  id="email"
-                  placeholder="votre@email.com"
-                />
-                <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-                  <div *ngIf="f['email'].errors['required']">Email est requis</div>
-                  <div *ngIf="f['email'].errors['email']">Email doit être une adresse valide</div>
-                </div>
-              </div>
-              
-              <div class="mb-4">
-                <label for="password" class="form-label">Mot de passe</label>
-                <input
-                  type="password"
-                  formControlName="password"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
-                  id="password"
-                />
-                <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-                  <div *ngIf="f['password'].errors['required']">Mot de passe est requis</div>
-                </div>
-              </div>
-              
-              <div class="d-grid">
-                <button [disabled]="loading" type="submit" class="btn btn-primary btn-lg">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Se connecter
-                </button>
-              </div>
-              
-              <div class="text-center mt-4">
-                <p>Vous n'avez pas de compte ? <a routerLink="/register">S'inscrire</a></p>
-              </div>
-            </form>
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">Se connecter</h2>
+          
+          <!-- Alert for errors -->
+          <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ errorMessage }}
+            <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
           </div>
+          
+          <form (ngSubmit)="onSubmit()">
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email"
+                [(ngModel)]="loginData.email" 
+                required
+                [disabled]="loading"
+              >
+            </div>
+            
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Mot de passe</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password" 
+                name="password"
+                [(ngModel)]="loginData.password" 
+                required
+                [disabled]="loading"
+              >
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="loading"
+              >
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Se connecter
+              </button>
+            </div>
+            
+            <!-- Register Link -->
+            <div class="text-center mt-3">
+              <p>Vous n'avez pas de compte? <a routerLink="/register">S'inscrire</a></p>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>

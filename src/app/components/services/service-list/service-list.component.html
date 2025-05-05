@@ -28,41 +28,14 @@
     (click)="filterByCategory('')"
   >Tous</button>
 
-  <a 
-  class="btn" 
-  [ngClass]="selectedCategory === ServiceCategory.REMORQUAGE ? 'btn-primary' : 'btn-outline-primary'"
-  (click)="filterByCategory(ServiceCategory.REMORQUAGE)"
-  [routerLink]="'/remorquage'"
->
-  Remorquage
-</a>
+  <a routerLink="/remorquage" [queryParams]="{category: 'REMORQUAGE'}" class="btn btn-outline-primary mt-2">remorquage </a>
 
-<a 
-  class="btn" 
-  [ngClass]="selectedCategory === ServiceCategory.MECANIQUE ? 'btn-primary' : 'btn-outline-primary'"
-  (click)="filterByCategory(ServiceCategory.MECANIQUE)"
-  [routerLink]="'/mecanique'"
->
-  Mécanique
-</a>
 
-<a 
-  class="btn" 
-  [ngClass]="selectedCategory === ServiceCategory.PIECE_AUTO ? 'btn-primary' : 'btn-outline-primary'"
-  (click)="filterByCategory(ServiceCategory.PIECE_AUTO)"
-  [routerLink]="'/piece-auto'"
->
-  Pièces Auto
-</a>
+<a routerLink="/mecanique" [queryParams]="{category: 'MECANIQUE'}" class="btn btn-outline-primary mt-2">mecanique</a>
 
-<a 
-  class="btn" 
-  [ngClass]="selectedCategory === ServiceCategory.LOCATION_VOITURE ? 'btn-primary' : 'btn-outline-primary'"
-  (click)="filterByCategory(ServiceCategory.LOCATION_VOITURE)"
-  [routerLink]="'/location'"
->
-  Location
-</a>
+<a routerLink="/piece-auto" [queryParams]="{category: 'PIECE_AUTO'}" class="btn btn-outline-primary mt-2"> piece-auto</a>
+
+<a routerLink="/location" [queryParams]="{category: 'LOCATION_VOITURE'}" class="btn btn-outline-primary mt-2"> location</a>
 
 
 
