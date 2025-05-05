@@ -167,4 +167,226 @@
       </div>
     </div>
   </div>
+     
+
+  <div class="container py-5">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="display-5 fw-bold text-primary mb-3">Location de Véhicules</h1>
+        <p class="lead">Découvrez notre large sélection de véhicules disponibles à la location. Des compactes économiques aux SUV spacieux, nous avons le véhicule parfait pour tous vos besoins.</p>
+      </div>
+    </div>
   
+    <!-- Search and Filters -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3 mb-md-0">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Filtres</h5>
+          </div>
+          <div class="card-body">
+            <!-- Search -->
+            <div class="mb-3">
+              <label for="search" class="form-label">Recherche</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="search" 
+                placeholder="Marque, modèle..." 
+                [(ngModel)]="filters.search"
+                (input)="onFilterChange()"
+              >
+            </div>
+  
+            <!-- Category -->
+            <div class="mb-3">
+              <label for="category" class="form-label">Catégorie</label>
+              <select 
+                class="form-select" 
+                id="category" 
+                [(ngModel)]="filters.category"
+                (change)="onFilterChange()"
+              >
+                <option [ngValue]="undefined">Toutes les catégories</option>
+                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+              </select>
+            </div>
+  
+            <!-- Price Range -->
+            <div class="mb-3">
+              <label class="form-label">Prix par jour (DH)</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    placeholder="Min" 
+                    [(ngModel)]="filters.priceMin"
+                    (input)="onFilterChange()"
+                  >
+                </div>
+                <div class="col-6">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    placeholder="Max" 
+                    [(ngModel)]="filters.priceMax"
+                    (input)="onFilterChange()"
+                  >
+                </div>
+              </div>
+            </div>
+  
+            <!-- Transmission -->
+            <div class="mb-3">
+              <label class="form-label">Transmission</label>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="transmission" 
+                  id="all-transmission" 
+                  [value]="undefined" 
+                  [(ngModel)]="filters.transmission"
+                  (change)="onFilterChange()"
+                >
+                <label class="form-check-label" for="all-transmission">
+                  Toutes
+                </label>
+              </div>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="transmission" 
+                  id="automatic" 
+                  value="automatic" 
+                  [(ngModel)]="filters.transmission"
+                  (change)="onFilterChange()"
+                >
+                <label class="form-check-label" for="automatic">
+                  Automatique
+                </label>
+              </div>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="transmission" 
+                  id="manual" 
+                  value="manual" 
+                  [(ngModel)]="filters.transmission"
+                  (change)="onFilterChange()"
+                >
+                <label class="form-check-label" for="manual">
+                  Manuelle
+                </label>
+              </div>
+            </div>
+  
+            <!-- Location -->
+            <div class="mb-3">
+              <label for="location" class="form-label">Ville</label>
+              <select 
+                class="form-select" 
+                id="location" 
+                [(ngModel)]="filters.location"
+                (change)="onFilterChange()"
+              >
+                <option [ngValue]="undefined">Toutes les villes</option>
+                <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
+              </select>
+            </div>
+  
+            <!-- Reset Filters -->
+            <button class="btn btn-outline-primary w-100" (click)="resetFilters()">
+              Réinitialiser les filtres
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-9">
+        <!-- Sort Options -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <span class="me-2">Trier par:</span>
+            <select 
+              class="form-select form-select-sm d-inline-block w-auto" 
+              [(ngModel)]="sortOption"
+              (change)="onSortChange()"
+            >
+              <option value="price-asc">Prix: croissant</option>
+              <option value="price-desc">Prix: décroissant</option>
+              <option value="rating-desc">Meilleures notes</option>
+              <option value="newest">Plus récents</option>
+            </select>
+          </div>
+          <div>
+            <span class="badge bg-primary">{{ filteredCars.length }} véhicules trouvés</span>
+          </div>
+        </div>
+  
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+          </div>
+          <p class="mt-2">Chargement des véhicules...</p>
+        </div>
+  
+        <!-- Error State -->
+        <div *ngIf="error && !loading" class="alert alert-danger">
+          {{ error }}
+        </div>
+  
+        <!-- Empty State -->
+        <div *ngIf="!loading && !error && filteredCars.length === 0" class="text-center py-5">
+          <div class="mb-3">
+            <i class="bi bi-car-front display-1 text-muted"></i>
+          </div>
+          <h3>Aucun véhicule trouvé</h3>
+          <p class="text-muted">Essayez de modifier vos filtres pour voir plus de résultats.</p>
+        </div>
+  
+        <!-- Car List -->
+        <div *ngIf="!loading && filteredCars.length > 0" class="row row-cols-1 row-cols-md-2 g-4">
+          <div *ngFor="let car of filteredCars" class="col">
+            <div class="card h-100 shadow-sm hover-shadow">
+              <div class="position-relative">
+                <img [src]="getMainImage(car)" class="card-img-top" alt="{{ car.make }} {{ car.model }}" style="height: 200px; object-fit: cover;">
+                <span class="position-absolute top-0 end-0 badge bg-primary m-2">{{ car.year }}</span>
+                <span *ngIf="car.rating" class="position-absolute bottom-0 start-0 badge bg-warning text-dark m-2">
+                  <i class="bi bi-star-fill me-1"></i>{{ car.rating.toFixed(1) }}
+                </span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
+                <p class="card-text text-muted small mb-2">{{ car.category }} • {{ car.transmission === 'automatic' ? 'Automatique' : 'Manuelle' }} • {{ car.seats }} places</p>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-primary fw-bold">{{ formatPrice(car.price, car.priceUnit) }}</span>
+                  <span class="badge bg-light text-dark">{{ car.location }}</span>
+                </div>
+                
+                <div class="mb-3">
+                  <p class="card-text small text-truncate">{{ car.description }}</p>
+                </div>
+                
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                  <span *ngFor="let feature of car.features.slice(0, 3)" class="badge bg-light text-dark">{{ feature }}</span>
+                  <span *ngIf="car.features.length > 3" class="badge bg-light text-dark">+{{ car.features.length - 3 }}</span>
+                </div>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="d-grid gap-2">
+                  <a [routerLink]="['/services', car._id]" class="btn btn-primary">Voir détails</a>
+                  <button class="btn btn-outline-primary" [disabled]="!car.available">Réserver maintenant</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

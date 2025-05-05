@@ -337,5 +337,50 @@
         }
       }
     }
+  
+  
+  
+    .hover-shadow {
+      transition: all 0.3s ease;
+    }
+    
+    .hover-shadow:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .form-select, .form-control {
+      border-radius: 0.375rem;
+    }
+    
+    .badge {
+      font-weight: 500;
+    }
+    
+    /* Custom scrollbar for filters on mobile */
+    @media (max-width: 767.98px) {
+      .card-body {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      
+      .card-body::-webkit-scrollbar {
+        width: 5px;
+      }
+      
+      .card-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      
+      .card-body::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+      }
+      
+      .card-body::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    }
   }
+
   

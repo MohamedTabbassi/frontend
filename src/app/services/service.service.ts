@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { RentalCarFilter } from '../models/rental-car.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class ServiceService {
   }
 
   // Add this method for searching rental vehicles
-  searchRentalVehicles(params: any): Observable<any> {
+  searchrentalvehicle(params: any): Observable<any> {
     return this.apiService.get(`${this.endpoint}/rental/search`, params);
   }
 
@@ -55,5 +56,31 @@ export class ServiceService {
 
   deleteService(id: string): Observable<any> {
     return this.apiService.delete(`${this.endpoint}/${id}`);
+ 
+ 
   }
+
+
+
+// Add these methods to your existing ServiceService
+
+// Get all rental cars
+getRentalCars(params?: any): Observable<any> {
+  return this.apiService.get(`${this.endpoint}/rental`, params);
 }
+
+// Get rental car by ID
+getRentalCarById(id: string): Observable<any> {
+  return this.apiService.get(`${this.endpoint}/rental/${id}`);
+}
+
+// Search rental cars with filters
+searchRentalVehicles(filters: RentalCarFilter): Observable<any> {
+  return this.apiService.get(`${this.endpoint}/rental/search`, filters);
+}
+
+
+
+
+}
+
