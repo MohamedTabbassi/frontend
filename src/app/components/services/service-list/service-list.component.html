@@ -29,41 +29,41 @@
   >Tous</button>
 
   <a 
-    class="btn" 
-    [ngClass]="selectedCategory === ServiceCategory.REMORQUAGE ? 'btn-primary' : 'btn-outline-primary'"
-    (click)="filterByCategory(ServiceCategory.REMORQUAGE)"
-    href="/remorquage"
-  >
-    Remorquage
-  </a>
+  class="btn" 
+  [ngClass]="selectedCategory === ServiceCategory.REMORQUAGE ? 'btn-primary' : 'btn-outline-primary'"
+  (click)="filterByCategory(ServiceCategory.REMORQUAGE)"
+  [routerLink]="'/remorquage'"
+>
+  Remorquage
+</a>
 
-  <a 
-    class="btn" 
-    [ngClass]="selectedCategory === ServiceCategory.MECANIQUE ? 'btn-primary' : 'btn-outline-primary'"
-    (click)="filterByCategory(ServiceCategory.MECANIQUE)"
-    href="/MECANIQUE"
-  >
-    Mécanique
-  </a>
+<a 
+  class="btn" 
+  [ngClass]="selectedCategory === ServiceCategory.MECANIQUE ? 'btn-primary' : 'btn-outline-primary'"
+  (click)="filterByCategory(ServiceCategory.MECANIQUE)"
+  [routerLink]="'/mecanique'"
+>
+  Mécanique
+</a>
 
-  <a 
-    class="btn" 
-    [ngClass]="selectedCategory === ServiceCategory.PIECE_AUTO ? 'btn-primary' : 'btn-outline-primary'"
-    (click)="filterByCategory(ServiceCategory.PIECE_AUTO)"
-    href="/piece-auto"
-  >
-    Pièces Auto
-  </a>
+<a 
+  class="btn" 
+  [ngClass]="selectedCategory === ServiceCategory.PIECE_AUTO ? 'btn-primary' : 'btn-outline-primary'"
+  (click)="filterByCategory(ServiceCategory.PIECE_AUTO)"
+  [routerLink]="'/piece-auto'"
+>
+  Pièces Auto
+</a>
 
-  <a 
-    class="btn" 
-    [ngClass]="selectedCategory === ServiceCategory.LOCATION_VOITURE ? 'btn-primary' : 'btn-outline-primary'"
-    (click)="filterByCategory(ServiceCategory.LOCATION_VOITURE)"
-    href="/location"
-  >
-    Location
-  </a>
-</div>
+<a 
+  class="btn" 
+  [ngClass]="selectedCategory === ServiceCategory.LOCATION_VOITURE ? 'btn-primary' : 'btn-outline-primary'"
+  (click)="filterByCategory(ServiceCategory.LOCATION_VOITURE)"
+  [routerLink]="'/location'"
+>
+  Location
+</a>
+
 
 
   <!-- Error message -->
