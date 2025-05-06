@@ -10,7 +10,7 @@ import { DashboardComponent } from './components/dashboard/dashboard/dashboard.c
 import { ServiceListComponent } from './components/services/service-list/service-list.component';
 import { ServiceDetailComponent } from './components/services/service-detail/service-detail.component';
 import { BookingListComponent } from './components/bookings/booking-list/booking-list.component';
-
+import { MobileMechanicComponent } from './components/services/mobile-mechanic/mobile-mechanic.component';
 import { ServiceProviderDashboardComponent } from './components/dashboard/service-provider-dashboard/service-provider-dashboard.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard/admin-dashboard.component';
 
@@ -30,6 +30,7 @@ export const routes: Routes = [
   // Service category routes
   { path: 'remorquage', component: RemorquageComponent },
   { path: 'mecanique', component: MecaniqueComponent },
+  { path: "services/mobile-mechanic", component: MobileMechanicComponent },
   { path: 'piece-auto', component: PieceAutoComponent },
   { path: 'location', component: LocationComponent },
   

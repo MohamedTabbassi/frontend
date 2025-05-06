@@ -1,392 +1,495 @@
-<div class="service-container">
-    <div class="service-header">
-      <h1>Location de Véhicules</h1>
-      <p>Trouvez le véhicule idéal pour tous vos besoins</p>
+<div class="tunisia-rent-car">
+  <!-- Header with logo and language options -->
+  <div class="header">
+    <div class="logo">
+      <h1>TUNISIA RENT CAR<sup>®</sup></h1>
+      <p>Agence de location voiture en Tunisie</p>
     </div>
-  
-    <!-- Search Form -->
-    <div class="search-section">
-      <h2>Rechercher un véhicule</h2>
-      <div class="search-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="startDate">Date de début</label>
-            <input type="date" id="startDate" name="startDate" [(ngModel)]="searchParams.startDate">
-          </div>
-          
-          <div class="form-group">
-            <label for="endDate">Date de fin</label>
-            <input type="date" id="endDate" name="endDate" [(ngModel)]="searchParams.endDate">
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="vehicleType">Type de véhicule</label>
-            <select id="vehicleType" name="vehicleType" [(ngModel)]="searchParams.vehicleType">
-              <option value="">Tous les types</option>
-              <option *ngFor="let type of vehicleTypes" [value]="type.id">{{ type.name }}</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="location">Lieu de prise en charge</label>
-            <select id="location" name="location" [(ngModel)]="searchParams.location">
-              <option value="">Tous les lieux</option>
-              <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
-            </select>
-          </div>
-        </div>
-        
-        <button class="btn-search" (click)="searchVehicles()">Rechercher</button>
+    <div class="header-right">
+      <div class="language-options">
+        <a href="#" class="active">FR</a> | <a href="#">EN</a>
+        <span class="currency">EUR <i class="fa fa-angle-down"></i></span>
+      </div>
+      <div class="contact-info">
+        <i class="fa fa-whatsapp"></i> (+216) 50 222 151
       </div>
     </div>
-  
-    <!-- Loading and Error States -->
+  </div>
+
+  <!-- Navigation Menu -->
+  <div class="nav-menu">
+    <div class="nav-links">
+      <a href="#" (click)="activeTab = 'home'; $event.preventDefault()" [class.active]="activeTab === 'home'">ACCUEIL</a>
+      <a href="#" (click)="activeTab = 'prices'; $event.preventDefault()" [class.active]="activeTab === 'prices'">TARIFS</a>
+      <a href="#" (click)="activeTab = 'cars'; $event.preventDefault()" [class.active]="activeTab === 'cars'">VOITURES</a>
+      <a href="#" (click)="activeTab = 'agencies'; $event.preventDefault()" [class.active]="activeTab === 'agencies'">AGENCES</a>
+      <a href="#" (click)="activeTab = 'promotions'; $event.preventDefault()" [class.active]="activeTab === 'promotions'">PROMOTIONS</a>
+      <a href="#" (click)="activeTab = 'strengths'; $event.preventDefault()" [class.active]="activeTab === 'strengths'">POINTS FORTS</a>
+      <a href="#" (click)="activeTab = 'transfer'; $event.preventDefault()" [class.active]="activeTab === 'transfer'">TRANSFERT</a>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn-help">BESOIN D'AIDE</button>
+      <button class="btn-contact">NOUS CONTACTER</button>
+    </div>
+  </div>
+
+  <!-- Breadcrumb navigation -->
+  <div class="breadcrumb">
+    <a href="#">Accueil</a> / 
+    <span *ngIf="activeTab === 'prices'">Tarifs</span>
+    <span *ngIf="activeTab === 'cars'">Voitures</span>
+    <span *ngIf="activeTab === 'agencies'">Agences</span>
+    <span *ngIf="activeTab === 'strengths'">Points Forts</span>
+    <span *ngIf="activeTab === 'transfer'">Transfert</span>
+  </div>
+
+  <!-- Search Form - Always visible -->
+  <div class="search-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Agence de prise en charge</label>
+        <select [(ngModel)]="searchParams.location" class="form-control">
+          <option value="">Sélectionnez un lieu</option>
+          <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date de retrait</label>
+        <div class="date-input">
+          <input type="date" [(ngModel)]="searchParams.startDate" class="form-control">
+        </div>
+      </div>
+      <div class="form-group small">
+        <label>Heure</label>
+        <select [(ngModel)]="searchParams.startTime" class="form-control">
+          <option value="10:00">10:00</option>
+          <option value="11:00">11:00</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+          <option value="17:00">17:00</option>
+          <option value="18:00">18:00</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date de retour</label>
+        <div class="date-input">
+          <input type="date" [(ngModel)]="searchParams.endDate" class="form-control">
+        </div>
+      </div>
+      <div class="form-group small">
+        <label>Heure</label>
+        <select [(ngModel)]="searchParams.endTime" class="form-control">
+          <option value="10:00">10:00</option>
+          <option value="11:00">11:00</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+          <option value="17:00">17:00</option>
+          <option value="18:00">18:00</option>
+        </select>
+      </div>
+      <div class="form-group search-btn">
+        <button class="btn-search" (click)="searchVehicles()">RECHERCHER</button>
+      </div>
+    </div>
+    <div class="different-return">
+      <input type="checkbox" id="differentReturn" [(ngModel)]="differentReturnLocation">
+      <label for="differentReturn">Agence de restitution différente</label>
+    </div>
+  </div>
+
+  <!-- ================ PRICES TAB ================ -->
+  <div *ngIf="activeTab === 'prices'" class="prices-tab">
+    <h2 class="section-title">Tarifs / Prix location voiture en Tunisie</h2>
+    
+    <div class="section-content">
+      <p>
+        Tunisia Rent Car est un acteur incontournable de la location de voitures en Tunisie via le site de réservation <strong>www.tunisia-rent-car.com</strong>. 
+        Loueur de véhicules de proximité, Tunisia Rent Car possède un large choix de véhicules, répartis dans un réseau de plusieurs agences de <strong>location</strong> et points relais.
+        Notre agence de <strong>location</strong> de voiture <strong>en Tunisie</strong> et à travers son réseaux peut vous assurer le meilleur service dans le domaine de 
+        <strong>location de voitures longue</strong> et courtes durée, avec ou sans chauffeur.
+      </p>
+    </div>
+
+    <h3 class="section-subtitle">Prix / tarifs pas chers location voitures en Tunisie</h3>
+
+    <div class="price-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Classe</th>
+            <th>Voitures</th>
+            <th>3 Jours<br>prix jour</th>
+            <th>1 Semaine<br>prix jour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let car of priceTable">
+            <td>{{ car.class }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.price3Days }} €</td>
+            <td>{{ car.price1Week }} €</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="price-notice">
+      <p>* Les prix sont donnés à titre indicatif et peuvent varier selon la saison et la disponibilité.</p>
+      <p>* Tous nos tarifs comprennent : kilométrage illimité, assurance au tiers et taxes locales.</p>
+      <p>* Options supplémentaires disponibles : GPS, siège bébé, assurance tous risques, etc.</p>
+    </div>
+  </div>
+
+  <!-- ================ CARS TAB ================ -->
+  <div *ngIf="activeTab === 'cars'" class="cars-tab">
+    <!-- Loading State -->
     <div *ngIf="loading" class="loading-spinner">
-      Chargement des véhicules...
+      <div class="spinner"></div>
+      <p>Chargement des véhicules...</p>
     </div>
     
+    <!-- Error Message -->
     <div *ngIf="error" class="error-message">
       {{ error }}
     </div>
-  
-    <!-- Vehicle List -->
-    <div *ngIf="!loading && !error" class="vehicles-list">
-      <h2>Véhicules disponibles</h2>
-      
-      <div *ngIf="rentalVehicles.length === 0" class="no-vehicles">
-        Aucun véhicule disponible pour les critères sélectionnés.
+
+    <!-- Filter Options -->
+    <div *ngIf="!loading && !error && filteredVehicles.length > 0" class="filter-options">
+      <div class="filter-item">
+        <label>Transmission</label>
+        <select [(ngModel)]="filterTransmission" (change)="applyFilters()" class="form-control">
+          <option value="">Tous</option>
+          <option value="manuelle">Manuelle</option>
+          <option value="automatique">Automatique</option>
+        </select>
       </div>
-      
-      <div *ngFor="let vehicle of rentalVehicles" class="vehicle-card" [class.selected]="selectedVehicle === vehicle" (click)="selectVehicle(vehicle)">
-        <div class="vehicle-image" *ngIf="vehicle.imageUrl">
+      <div class="filter-item">
+        <label>Nombre de siège</label>
+        <select [(ngModel)]="filterSeats" (change)="applyFilters()" class="form-control">
+          <option value="">Tous</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="7">7</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>Catégorie</label>
+        <select [(ngModel)]="filterCategory" (change)="applyFilters()" class="form-control">
+          <option value="">Tous</option>
+          <option value="economy">Économique</option>
+          <option value="compact">Compacte</option>
+          <option value="sedan">Berline</option>
+          <option value="suv">SUV</option>
+          <option value="luxury">Luxe</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>Carburant</label>
+        <select [(ngModel)]="filterFuel" (change)="applyFilters()" class="form-control">
+          <option value="">Tous</option>
+            (change)="applyFilters()" class="form-control">
+          <option value="">Tous</option>
+          <option value="essence">Essence</option>
+          <option value="diesel">Diesel</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Vehicles Grid -->
+    <div class="vehicles-grid" *ngIf="!loading && !error && filteredVehicles.length > 0">
+      <div class="vehicle-card" *ngFor="let vehicle of filteredVehicles">
+        <div class="vehicle-badge" *ngIf="vehicle.isNew">
+          <span class="new-badge">NEW</span>
+        </div>
+        <div class="vehicle-image">
           <img [src]="vehicle.imageUrl" [alt]="vehicle.name">
         </div>
-        <div class="vehicle-details">
-          <h3>{{ vehicle.name }}</h3>
-          <div class="vehicle-specs">
-            <div class="spec">
-              <span class="spec-label">Catégorie:</span>
-              <span class="spec-value">{{ vehicle.category }}</span>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Places:</span>
-              <span class="spec-value">{{ vehicle.seats }}</span>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Transmission:</span>
-              <span class="spec-value">{{ vehicle.transmission }}</span>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Carburant:</span>
-              <span class="spec-value">{{ vehicle.fuelType }}</span>
-            </div>
+        <div class="vehicle-name">{{ vehicle.name }}</div>
+        <div class="vehicle-features">
+          <div class="feature">
+            <i class="fa fa-user"></i> {{ vehicle.seats }}
           </div>
-          <div class="vehicle-features" *ngIf="vehicle.features && vehicle.features.length">
-            <h4>Équipements</h4>
+          <div class="feature">
+            <i class="fa fa-suitcase"></i> {{ vehicle.luggage || '2' }}
+          </div>
+          <div class="feature">
+            <i class="fa fa-snowflake-o"></i> {{ vehicle.hasAC ? 'OUI' : 'NON' }}
+          </div>
+          <div class="feature">
+            <i class="fa fa-cog"></i> {{ vehicle.transmission }}
+          </div>
+        </div>
+        <div class="vehicle-price">
+          <div class="price-includes">
+            <p>Prix comprend</p>
             <ul>
-              <li *ngFor="let feature of vehicle.features">{{ feature }}</li>
+              <li>Kilométrage illimité</li>
+              <li>Assurance au tiers</li>
+              <li>Surcharge Aéroport/Gare</li>
+              <li>Caution : 600 €</li>
             </ul>
           </div>
-          <div class="vehicle-pricing">
-            <p class="price">{{ vehicle.pricePerDay | currency:'EUR' }} / jour</p>
-            <p class="total-price" *ngIf="searchParams.startDate && searchParams.endDate">
-              Total: {{ calculateTotalPrice(vehicle) | currency:'EUR' }}
-            </p>
+          <div class="price-total">
+            <div class="total-days">Total pour {{ calculateDays() }} jours</div>
+            <div class="total-amount">{{ calculateTotalPrice(vehicle) }} €</div>
+            <div class="price-per-day">{{ vehicle.pricePerDay }} € <span>/jour</span></div>
           </div>
         </div>
+        <button class="btn-reserve" (click)="selectVehicle(vehicle)">DEVIS ET RÉSERVATION</button>
       </div>
     </div>
-  
-    <!-- Booking Section -->
-    <div *ngIf="selectedVehicle" class="booking-section">
-      <h2>Réserver ce véhicule</h2>
-      <div class="booking-details">
-        <div class="selected-vehicle">
-          <h3>{{ selectedVehicle.name }}</h3>
-          <p class="price">{{ selectedVehicle.pricePerDay | currency:'EUR' }} / jour</p>
-          <p class="total-price" *ngIf="searchParams.startDate && searchParams.endDate">
-            Total: {{ calculateTotalPrice(selectedVehicle) | currency:'EUR' }}
-          </p>
-        </div>
-        <div class="booking-dates">
-          <div *ngIf="!searchParams.startDate || !searchParams.endDate" class="date-warning">
-            Veuillez sélectionner les dates de location pour continuer.
-          </div>
-          <div *ngIf="searchParams.startDate && searchParams.endDate">
-            <p><strong>Du:</strong> {{ searchParams.startDate | date:'dd/MM/yyyy' }}</p>
-            <p><strong>Au:</strong> {{ searchParams.endDate | date:'dd/MM/yyyy' }}</p>
-          </div>
-        </div>
-        <button class="btn-book" (click)="bookVehicle()" [disabled]="!searchParams.startDate || !searchParams.endDate">
-          Réserver maintenant
-        </button>
-      </div>
-    </div>
-  
-    <!-- Rental Information -->
-    <div class="rental-info">
-      <h2>Informations de location</h2>
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>Documents requis</h3>
-          <ul>
-            <li>Permis de conduire valide</li>
-            <li>Pièce d'identité</li>
-            <li>Carte de crédit au nom du conducteur</li>
-            <li>Justificatif de domicile (pour certains véhicules)</li>
-          </ul>
-        </div>
-        <div class="info-card">
-          <h3>Conditions de location</h3>
-          <ul>
-            <li>Âge minimum: 21 ans</li>
-            <li>Permis obtenu depuis au moins 2 ans</li>
-            <li>Caution requise à la prise du véhicule</li>
-            <li>Kilométrage illimité sur certains véhicules</li>
-          </ul>
-        </div>
-        <div class="info-card">
-          <h3>Assurances</h3>
-          <ul>
-            <li>Assurance de base incluse</li>
-            <li>Options d'assurance supplémentaires disponibles</li>
-            <li>Protection contre le vol</li>
-            <li>Assistance routière 24/7</li>
-          </ul>
-        </div>
-        <div class="info-card">
-          <h3>Politique d'annulation</h3>
-          <ul>
-            <li>Annulation gratuite jusqu'à 48h avant la prise en charge</li>
-            <li>Frais d'annulation de 50% entre 24h et 48h</li>
-            <li>Aucun remboursement pour annulation à moins de 24h</li>
-          </ul>
-        </div>
-      </div>
+
+    <!-- No Vehicles Message -->
+    <div *ngIf="!loading && !error && filteredVehicles.length === 0" class="no-vehicles">
+      <p>Aucun véhicule disponible pour les critères sélectionnés.</p>
     </div>
   </div>
-     
 
-  <div class="container py-5">
-    <div class="row mb-4">
-      <div class="col-12">
-        <h1 class="display-5 fw-bold text-primary mb-3">Location de Véhicules</h1>
-        <p class="lead">Découvrez notre large sélection de véhicules disponibles à la location. Des compactes économiques aux SUV spacieux, nous avons le véhicule parfait pour tous vos besoins.</p>
+  <!-- ================ AGENCIES TAB ================ -->
+  <div *ngIf="activeTab === 'agencies'" class="agencies-tab">
+    <h2 class="section-title">Agence location voiture tunisie</h2>
+    
+    <div class="section-content">
+      <p>
+        Tunisia Rent Car est une agence de location de voitures en Tunisie qui propose à ses clients la location de voitures pas chères à tunis et dans toutes les villes touristiques de la tunisie tels que hammamet, tozeur, tabarka, nabeul, sousse, djerba, enfidha, zaghouan, monastir, hergia, bizerte ainsi que les aéroport tunis carthage, aéroport enfidha, aéroport djerba, aéroport sfax, aéroport djerba, Tunisia Rent Car est une société dont l'activité principale consiste en la location de voitures de tourisme et utilitaires en Tunisie notre objectif principal est la satisfaction du client.
+      </p>
+    </div>
+
+    <div *ngFor="let agency of agencies" class="agency-section">
+      <h3 class="agency-title">{{ agency.name }}</h3>
+      <p class="agency-description">{{ agency.description }}</p>
+      
+      <div class="agency-contact">
+        <p><strong>Téléphone :</strong> {{ agency.phone }}</p>
+        <p><strong>E-mail :</strong> {{ agency.email }}</p>
       </div>
     </div>
-  
-    <!-- Search and Filters -->
-    <div class="row mb-4">
-      <div class="col-md-3 mb-3 mb-md-0">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Filtres</h5>
-          </div>
-          <div class="card-body">
-            <!-- Search -->
-            <div class="mb-3">
-              <label for="search" class="form-label">Recherche</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                id="search" 
-                placeholder="Marque, modèle..." 
-                [(ngModel)]="filters.search"
-                (input)="onFilterChange()"
-              >
-            </div>
-  
-            <!-- Category -->
-            <div class="mb-3">
-              <label for="category" class="form-label">Catégorie</label>
-              <select 
-                class="form-select" 
-                id="category" 
-                [(ngModel)]="filters.category"
-                (change)="onFilterChange()"
-              >
-                <option [ngValue]="undefined">Toutes les catégories</option>
-                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-              </select>
-            </div>
-  
-            <!-- Price Range -->
-            <div class="mb-3">
-              <label class="form-label">Prix par jour (DH)</label>
-              <div class="row g-2">
-                <div class="col-6">
-                  <input 
-                    type="number" 
-                    class="form-control" 
-                    placeholder="Min" 
-                    [(ngModel)]="filters.priceMin"
-                    (input)="onFilterChange()"
-                  >
-                </div>
-                <div class="col-6">
-                  <input 
-                    type="number" 
-                    class="form-control" 
-                    placeholder="Max" 
-                    [(ngModel)]="filters.priceMax"
-                    (input)="onFilterChange()"
-                  >
-                </div>
-              </div>
-            </div>
-  
-            <!-- Transmission -->
-            <div class="mb-3">
-              <label class="form-label">Transmission</label>
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="radio" 
-                  name="transmission" 
-                  id="all-transmission" 
-                  [value]="undefined" 
-                  [(ngModel)]="filters.transmission"
-                  (change)="onFilterChange()"
-                >
-                <label class="form-check-label" for="all-transmission">
-                  Toutes
-                </label>
-              </div>
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="radio" 
-                  name="transmission" 
-                  id="automatic" 
-                  value="automatic" 
-                  [(ngModel)]="filters.transmission"
-                  (change)="onFilterChange()"
-                >
-                <label class="form-check-label" for="automatic">
-                  Automatique
-                </label>
-              </div>
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="radio" 
-                  name="transmission" 
-                  id="manual" 
-                  value="manual" 
-                  [(ngModel)]="filters.transmission"
-                  (change)="onFilterChange()"
-                >
-                <label class="form-check-label" for="manual">
-                  Manuelle
-                </label>
-              </div>
-            </div>
-  
-            <!-- Location -->
-            <div class="mb-3">
-              <label for="location" class="form-label">Ville</label>
-              <select 
-                class="form-select" 
-                id="location" 
-                [(ngModel)]="filters.location"
-                (change)="onFilterChange()"
-              >
-                <option [ngValue]="undefined">Toutes les villes</option>
-                <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
-              </select>
-            </div>
-  
-            <!-- Reset Filters -->
-            <button class="btn btn-outline-primary w-100" (click)="resetFilters()">
-              Réinitialiser les filtres
-            </button>
-          </div>
-        </div>
-      </div>
-  
-      <div class="col-md-9">
-        <!-- Sort Options -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <span class="me-2">Trier par:</span>
-            <select 
-              class="form-select form-select-sm d-inline-block w-auto" 
-              [(ngModel)]="sortOption"
-              (change)="onSortChange()"
-            >
-              <option value="price-asc">Prix: croissant</option>
-              <option value="price-desc">Prix: décroissant</option>
-              <option value="rating-desc">Meilleures notes</option>
-              <option value="newest">Plus récents</option>
+
+    <!-- Search Form embedded in agencies tab -->
+    <div class="agency-search-form">
+      <h3>Réserver une voiture</h3>
+      <div class="form-container">
+        <div class="form-row agency-form">
+          <div class="form-group">
+            <label>Agence de prise en charge</label>
+            <select class="form-control">
+              <option value="">Aéroport Tunis Carthage</option>
+              <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
             </select>
           </div>
-          <div>
-            <span class="badge bg-primary">{{ filteredCars.length }} véhicules trouvés</span>
+          <div class="form-group">
+            <label>Date de retrait</label>
+            <input type="date" class="form-control">
           </div>
-        </div>
-  
-        <!-- Loading State -->
-        <div *ngIf="loading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Chargement...</span>
+          <div class="form-group small">
+            <label>Heure</label>
+            <select class="form-control">
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+            </select>
           </div>
-          <p class="mt-2">Chargement des véhicules...</p>
-        </div>
-  
-        <!-- Error State -->
-        <div *ngIf="error && !loading" class="alert alert-danger">
-          {{ error }}
-        </div>
-  
-        <!-- Empty State -->
-        <div *ngIf="!loading && !error && filteredCars.length === 0" class="text-center py-5">
-          <div class="mb-3">
-            <i class="bi bi-car-front display-1 text-muted"></i>
+          <div class="form-group">
+            <label>Date de retour</label>
+            <input type="date" class="form-control">
           </div>
-          <h3>Aucun véhicule trouvé</h3>
-          <p class="text-muted">Essayez de modifier vos filtres pour voir plus de résultats.</p>
-        </div>
-  
-        <!-- Car List -->
-        <div *ngIf="!loading && filteredCars.length > 0" class="row row-cols-1 row-cols-md-2 g-4">
-          <div *ngFor="let car of filteredCars" class="col">
-            <div class="card h-100 shadow-sm hover-shadow">
-              <div class="position-relative">
-                <img [src]="getMainImage(car)" class="card-img-top" alt="{{ car.make }} {{ car.model }}" style="height: 200px; object-fit: cover;">
-                <span class="position-absolute top-0 end-0 badge bg-primary m-2">{{ car.year }}</span>
-                <span *ngIf="car.rating" class="position-absolute bottom-0 start-0 badge bg-warning text-dark m-2">
-                  <i class="bi bi-star-fill me-1"></i>{{ car.rating.toFixed(1) }}
-                </span>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
-                <p class="card-text text-muted small mb-2">{{ car.category }} • {{ car.transmission === 'automatic' ? 'Automatique' : 'Manuelle' }} • {{ car.seats }} places</p>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="text-primary fw-bold">{{ formatPrice(car.price, car.priceUnit) }}</span>
-                  <span class="badge bg-light text-dark">{{ car.location }}</span>
-                </div>
-                
-                <div class="mb-3">
-                  <p class="card-text small text-truncate">{{ car.description }}</p>
-                </div>
-                
-                <div class="d-flex flex-wrap gap-1 mb-3">
-                  <span *ngFor="let feature of car.features.slice(0, 3)" class="badge bg-light text-dark">{{ feature }}</span>
-                  <span *ngIf="car.features.length > 3" class="badge bg-light text-dark">+{{ car.features.length - 3 }}</span>
-                </div>
-              </div>
-              <div class="card-footer bg-white border-top-0">
-                <div class="d-grid gap-2">
-                  <a [routerLink]="['/services', car._id]" class="btn btn-primary">Voir détails</a>
-                  <button class="btn btn-outline-primary" [disabled]="!car.available">Réserver maintenant</button>
-                </div>
-              </div>
-            </div>
+          <div class="form-group small">
+            <label>Heure</label>
+            <select class="form-control">
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+            </select>
+          </div>
+          <div class="form-group search-btn">
+            <button class="btn-search">RECHERCHER</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ================ STRENGTH POINTS TAB ================ -->
+  <div *ngIf="activeTab === 'strengths'" class="strengths-tab">
+    <h2 class="section-title">Points Forts de Tunisia Rent Car</h2>
+    
+    <div class="section-content">
+      <p>
+        Chez Tunisia Rent Car, nous mettons tout en œuvre pour vous garantir un service de qualité et une expérience de location sans tracas. Découvrez nos principaux points forts qui font de nous le choix privilégié pour la location de voiture en Tunisie.
+      </p>
+    </div>
+
+    <div class="strengths-grid">
+      <div *ngFor="let point of strengthPoints" class="strength-card">
+        <h3>{{ point.title }}</h3>
+        <p>{{ point.description }}</p>
+      </div>
+    </div>
+
+    <div class="strength-highlight">
+      <h3>Pourquoi choisir Tunisia Rent Car ?</h3>
+      <ul>
+        <li><strong>Expérience :</strong> Plus de 15 ans d'expertise dans la location de voitures en Tunisie</li>
+        <li><strong>Transparence :</strong> Pas de frais cachés, tout est clairement indiqué dès la réservation</li>
+        <li><strong>Flexibilité :</strong> Modifications et annulations possibles selon conditions</li>
+        <li><strong>Assistance :</strong> Service client disponible 24h/24 et 7j/7</li>
+        <li><strong>Rapport qualité-prix :</strong> Tarifs compétitifs et offres promotionnelles régulières</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================ TRANSFER TAB ================ -->
+  <div *ngIf="activeTab === 'transfer'" class="transfer-tab">
+    <h2 class="section-title">Service de Transfert Aéroport</h2>
+    
+    <div class="section-content">
+      <p>
+        En plus de la location de voitures, Tunisia Rent Car propose un service de transfert aéroport de qualité. Que vous arriviez à l'aéroport de Tunis Carthage, Monastir, Enfidha ou Djerba, nous pouvons organiser votre transfert vers votre hôtel ou toute autre destination en Tunisie.
+      </p>
+    </div>
+
+    <div class="transfer-options">
+      <div class="transfer-card">
+        <h3>Transfert Standard</h3>
+        <p>Véhicule confortable avec chauffeur professionnel pour un transfert sans stress de l'aéroport à votre hôtel.</p>
+        <p class="price">À partir de 25 €</p>
+      </div>
+      <div class="transfer-card">
+        <h3>Transfert Premium</h3>
+        <p>Véhicule haut de gamme avec chauffeur professionnel parlant français et anglais, eau minérale offerte.</p>
+        <p class="price">À partir de 45 €</p>
+      </div>
+      <div class="transfer-card">
+        <h3>Transfert Groupe</h3>
+        <p>Minibus climatisé pour groupes jusqu'à 8 personnes, idéal pour les familles ou groupes d'amis.</p>
+        <p class="price">À partir de 60 €</p>
+      </div>
+    </div>
+
+    <div class="transfer-form">
+      <h3>Réserver un transfert</h3>
+      <div class="form-container">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Lieu de prise en charge</label>
+            <select class="form-control">
+              <option value="">Sélectionnez un lieu</option>
+              <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Destination</label>
+            <input type="text" placeholder="Hôtel, adresse..." class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-control">
+          </div>
+          <div class="form-group small">
+            <label>Heure</label>
+            <select class="form-control">
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+            </select>
+          </div>
+          <div class="form-group small">
+            <label>Passagers</label>
+            <select class="form-control">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group search-btn">
+            <button class="btn-search">DEMANDER UN DEVIS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="booking-modal" *ngIf="selectedVehicle" (click)="closeModal($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Réservation - {{ selectedVehicle.name }}</h2>
+        <button class="btn-close" (click)="selectedVehicle = null">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="booking-details">
+          <div class="vehicle-image">
+            <img [src]="selectedVehicle.imageUrl" [alt]="selectedVehicle.name">
+          </div>
+          <div class="booking-info">
+            <div class="dates-info">
+              <div class="date-group">
+                <h3>Prise en charge</h3>
+                <p>{{ searchParams.startDate | date:'dd/MM/yyyy' }} à {{ searchParams.startTime }}</p>
+                <p>{{ getLocationName(searchParams.location) }}</p>
+              </div>
+              <div class="date-group">
+                <h3>Restitution</h3>
+                <p>{{ searchParams.endDate | date:'dd/MM/yyyy' }} à {{ searchParams.endTime }}</p>
+                <p>{{ differentReturnLocation ? getLocationName(searchParams.returnLocation) : getLocationName(searchParams.location) }}</p>
+              </div>
+            </div>
+            <div class="price-details">
+              <h3>Détails du prix</h3>
+              <div class="price-row">
+                <span>Location du véhicule ({{ calculateDays() }} jours)</span>
+                <span>{{ calculateTotalPrice(selectedVehicle) }} €</span>
+              </div>
+              <div class="price-row total">
+                <span>Total</span>
+                <span>{{ calculateTotalPrice(selectedVehicle) }} €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="booking-options">
+          <h3>Options supplémentaires</h3>
+          <div class="option-row">
+            <div class="option-item">
+              <input type="checkbox" id="insurance" [(ngModel)]="bookingOptions.insurance">
+              <label for="insurance">Assurance tous risques (+10€/jour)</label>
+            </div>
+            <div class="option-item">
+              <input type="checkbox" id="gps" [(ngModel)]="bookingOptions.gps">
+              <label for="gps">GPS (+5€/jour)</label>
+            </div>
+          </div>
+          <div class="option-row">
+            <div class="option-item">
+              <input type="checkbox" id="childSeat" [(ngModel)]="bookingOptions.childSeat">
+              <label for="childSeat">Siège enfant (+7€/jour)</label>
+            </div>
+            <div class="option-item">
+              <input type="checkbox" id="additionalDriver" [(ngModel)]="bookingOptions.additionalDriver">
+              <label for="additionalDriver">Conducteur supplémentaire (+8€/jour)</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="final-price">
+          <span>Prix total:</span>
+          <span class="price">{{ calculateFinalPrice() }} €</span>
+        </div>
+        <button class="btn-confirm" (click)="bookVehicle()">CONFIRMER LA RÉSERVATION</button>
+      </div>
+    </div>
+  </div>
+</div>

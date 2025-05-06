@@ -1,152 +1,293 @@
-<div class="service-container">
-    <div class="service-header">
-      <h1>Services de Mécanique Automobile</h1>
-      <p>Entretien et réparation pour tous types de véhicules</p>
-    </div>
-  
-    <!-- Category Filter -->
-    <div class="category-filter">
-      <h3>Filtrer par catégorie</h3>
-      <div class="filter-buttons">
-        <button 
-          [class.active]="selectedCategory === ''" 
-          (click)="filterByCategory('')">
-          Tous
-        </button>
-        <button 
-          *ngFor="let category of serviceCategories" 
-          [class.active]="selectedCategory === category.id" 
-          (click)="filterByCategory(category.id)">
-          {{ category.name }}
-        </button>
+*<div class="service-container">
+  <div class="service-header">
+    <h1>Services de Mécanique Automobile</h1>
+    <p>Entretien et réparation pour tous types de véhicules</p>
+  </div>
+
+  <!-- Mobile Mechanic Hero Section -->
+  <div class="mobile-mechanic-hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="experience-badge">
+          <span class="years">25</span>
+          <span class="text">ANS<br>D'EXPÉRIENCE</span>
+        </div>
+        <h2>Atelier Mobile</h2>
+        <div class="hero-tagline">
+          <span class="pay">Payez</span>
+          <span class="discount">50% Moins</span>
+          <span class="on-your">sur votre</span>
+          <span class="service">Service Auto*</span>
+        </div>
+        <p class="tagline-secondary">Plus Rapide, Plus Intelligent, Plus Pratique.</p>
+        <p class="disclaimer">*50% moins cher que les centres de service traditionnels</p>
+        <button class="btn-book-mobile">RÉSERVER UN SERVICE</button>
       </div>
-    </div>
-  
-    <!-- Loading and Error States -->
-    <div *ngIf="loading" class="loading-spinner">
-      Chargement des services...
-    </div>
-    
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
-  
-    <!-- Services List -->
-    <div *ngIf="!loading && !error" class="services-list">
-      <h2>Nos services mécaniques</h2>
-      
-      <div *ngIf="mechanicServices.length === 0" class="no-services">
-        Aucun service mécanique disponible pour le moment.
-      </div>
-      
-      <div *ngFor="let service of mechanicServices" class="service-card">
-        <div class="service-image" *ngIf="service.imageUrl">
-          <img [src]="service.imageUrl" [alt]="service.name">
-        </div>
-        <div class="service-details">
-          <h3>{{ service.name }}</h3>
-          <p class="service-description">{{ service.description }}</p>
-          <p class="service-price">{{ service.price | currency:'EUR' }}</p>
-          <div class="service-tags">
-            <span class="tag" *ngIf="service.duration">Durée: {{ service.duration }}</span>
-            <span class="tag" *ngIf="service.warranty">Garantie: {{ service.warranty }}</span>
-          </div>
-          <button class="btn-book" [routerLink]="['/booking', service.id]">Réserver</button>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Appointment Booking Section -->
-    <div class="appointment-section">
-      <h2>Prendre rendez-vous</h2>
-      <div class="appointment-form">
-        <form (ngSubmit)="bookAppointment()">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="serviceType">Type de service</label>
-              <select id="serviceType" name="serviceType" [(ngModel)]="appointmentRequest.serviceType" required>
-                <option value="">Sélectionnez</option>
-                <option *ngFor="let category of serviceCategories" [value]="category.id">{{ category.name }}</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label for="vehicleMake">Marque du véhicule</label>
-              <input type="text" id="vehicleMake" name="vehicleMake" [(ngModel)]="appointmentRequest.vehicleMake" required>
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="vehicleModel">Modèle</label>
-              <input type="text" id="vehicleModel" name="vehicleModel" [(ngModel)]="appointmentRequest.vehicleModel" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="vehicleYear">Année</label>
-              <input type="text" id="vehicleYear" name="vehicleYear" [(ngModel)]="appointmentRequest.vehicleYear" required>
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="preferredDate">Date souhaitée</label>
-              <input type="date" id="preferredDate" name="preferredDate" [(ngModel)]="appointmentRequest.preferredDate" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="preferredTime">Heure souhaitée</label>
-              <input type="time" id="preferredTime" name="preferredTime" [(ngModel)]="appointmentRequest.preferredTime" required>
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="customerName">Nom complet</label>
-              <input type="text" id="customerName" name="customerName" [(ngModel)]="appointmentRequest.customerName" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="contactNumber">Numéro de téléphone</label>
-              <input type="tel" id="contactNumber" name="contactNumber" [(ngModel)]="appointmentRequest.contactNumber" required>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="additionalInfo">Informations supplémentaires</label>
-            <textarea id="additionalInfo" name="additionalInfo" [(ngModel)]="appointmentRequest.additionalInfo"></textarea>
-          </div>
-          
-          <button type="submit" class="btn-submit">Demander un rendez-vous</button>
-        </form>
-      </div>
-    </div>
-  
-    <!-- Why Choose Us Section -->
-    <div class="why-choose-us">
-      <h2>Pourquoi choisir notre atelier mécanique?</h2>
-      <div class="features">
-        <div class="feature">
-          <div class="feature-icon">🔧</div>
-          <h3>Techniciens certifiés</h3>
-          <p>Nos mécaniciens sont tous certifiés et formés régulièrement aux dernières technologies.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">⏱️</div>
-          <h3>Service rapide</h3>
-          <p>Nous respectons votre temps et nous efforçons de terminer les réparations dans les délais convenus.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">💰</div>
-          <h3>Prix transparents</h3>
-          <p>Pas de surprises! Nous vous fournissons des devis détaillés avant de commencer tout travail.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🛡️</div>
-          <h3>Garantie sur les réparations</h3>
-          <p>Toutes nos réparations sont garanties pour votre tranquillité d'esprit.</p>
-        </div>
+      <div class="hero-image">
+        <img src="https://via.placeholder.com/600x400/ff6b00/ffffff?text=Atelier+Mobile" alt="Mécanicien à domicile">
       </div>
     </div>
   </div>
+
+  <!-- Mobile Mechanic Benefits -->
+  <div class="benefits-section">
+    <div class="benefit-card">
+      <div class="benefit-icon">🔧</div>
+      <h3>Atelier sur Roues</h3>
+      <p>Notre atelier mobile vient directement à votre domicile ou lieu de travail.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">💰</div>
+      <h3>50% Moins Cher</h3>
+      <p>Économisez jusqu'à 50% par rapport aux centres de service traditionnels.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">⏱️</div>
+      <h3>Service Rapide</h3>
+      <p>Pas de temps d'attente, nous intervenons à l'heure qui vous convient.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🛡️</div>
+      <h3>Service à Domicile</h3>
+      <p>Restez chez vous pendant que nous nous occupons de votre véhicule.</p>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <div class="how-it-works">
+    <h2>Comment ça fonctionne</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Réservez</h3>
+        <p>Réservez un service en ligne ou par téléphone</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Nous venons à vous</h3>
+        <p>Notre mécanicien vient à votre domicile ou lieu de travail</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Service effectué</h3>
+        <p>Votre véhicule est réparé sur place sans déplacement</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="category-filter">
+    <h3>Filtrer par catégorie</h3>
+    <div class="filter-buttons">
+      <button 
+        [class.active]="selectedCategory === ''" 
+        (click)="filterByCategory('')">
+        Tous
+      </button>
+      <button 
+        *ngFor="let category of serviceCategories" 
+        [class.active]="selectedCategory === category.id" 
+        (click)="filterByCategory(category.id)">
+        {{ category.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="loading" class="loading-spinner">
+    Chargement des services...
+  </div>
   
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Services List -->
+  <div *ngIf="!loading && !error" class="services-list">
+    <h2>Nos services mécaniques</h2>
+    
+    <div *ngIf="mechanicServices.length === 0" class="no-services">
+      Aucun service mécanique disponible pour le moment.
+    </div>
+    
+    <div *ngFor="let service of mechanicServices" class="service-card">
+      <div class="service-image" *ngIf="service.imageUrl">
+        <img [src]="service.imageUrl" [alt]="service.name">
+      </div>
+      <div class="service-details">
+        <h3>{{ service.name }}</h3>
+        <p class="service-description">{{ service.description }}</p>
+        <p class="service-price">{{ service.price | currency:'EUR' }}</p>
+        <div class="service-tags">
+          <span class="tag" *ngIf="service.duration">Durée: {{ service.duration }}</span>
+          <span class="tag" *ngIf="service.warranty">Garantie: {{ service.warranty }}</span>
+        </div>
+        <button class="btn-book" [routerLink]="['/booking', service.id]">Réserver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Mechanic Services -->
+  <div class="mobile-services">
+    <h2>Services d'Atelier Mobile</h2>
+    <div class="mobile-services-grid">
+      <div class="mobile-service-card">
+        <img src="https://via.placeholder.com/300x200/ff6b00/ffffff?text=Vidange" alt="Vidange d'huile">
+        <h3>Vidange d'huile</h3>
+        <p>Changement d'huile et de filtre à domicile</p>
+        <p class="price"><span class="original">80€</span> <span class="discounted">40€</span></p>
+        <button class="btn-book-service">Réserver</button>
+      </div>
+      <div class="mobile-service-card">
+        <img src="https://via.placeholder.com/300x200/ff6b00/ffffff?text=Batterie" alt="Remplacement de batterie">
+        <h3>Remplacement de batterie</h3>
+        <p>Installation d'une nouvelle batterie à domicile</p>
+        <p class="price"><span class="original">100€</span> <span class="discounted">50€</span></p>
+        <button class="btn-book-service">Réserver</button>
+      </div>
+      <div class="mobile-service-card">
+        <img src="https://via.placeholder.com/300x200/ff6b00/ffffff?text=Freins" alt="Remplacement de freins">
+        <h3>Remplacement de freins</h3>
+        <p>Changement de plaquettes et/ou disques à domicile</p>
+        <p class="price"><span class="original">160€</span> <span class="discounted">80€</span></p>
+        <button class="btn-book-service">Réserver</button>
+      </div>
+      <div class="mobile-service-card">
+        <img src="https://via.placeholder.com/300x200/ff6b00/ffffff?text=Diagnostic" alt="Diagnostic électronique">
+        <h3>Diagnostic électronique</h3>
+        <p>Analyse complète des systèmes de votre véhicule</p>
+        <p class="price"><span class="original">90€</span> <span class="discounted">45€</span></p>
+        <button class="btn-book-service">Réserver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointment Booking Section -->
+  <div class="appointment-section">
+    <h2>Prendre rendez-vous</h2>
+    <div class="appointment-form">
+      <form (ngSubmit)="bookAppointment()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="serviceType">Type de service</label>
+            <select id="serviceType" name="serviceType" [(ngModel)]="appointmentRequest.serviceType" required>
+              <option value="">Sélectionnez</option>
+              <option *ngFor="let category of serviceCategories" [value]="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="vehicleMake">Marque du véhicule</label>
+            <input type="text" id="vehicleMake" name="vehicleMake" [(ngModel)]="appointmentRequest.vehicleMake" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vehicleModel">Modèle</label>
+            <input type="text" id="vehicleModel" name="vehicleModel" [(ngModel)]="appointmentRequest.vehicleModel" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="vehicleYear">Année</label>
+            <input type="text" id="vehicleYear" name="vehicleYear" [(ngModel)]="appointmentRequest.vehicleYear" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="preferredDate">Date souhaitée</label>
+            <input type="date" id="preferredDate" name="preferredDate" [(ngModel)]="appointmentRequest.preferredDate" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="preferredTime">Heure souhaitée</label>
+            <input type="time" id="preferredTime" name="preferredTime" [(ngModel)]="appointmentRequest.preferredTime" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Nom complet</label>
+            <input type="text" id="customerName" name="customerName" [(ngModel)]="appointmentRequest.customerName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="contactNumber">Numéro de téléphone</label>
+            <input type="tel" id="contactNumber" name="contactNumber" [(ngModel)]="appointmentRequest.contactNumber" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="additionalInfo">Informations supplémentaires</label>
+          <textarea id="additionalInfo" name="additionalInfo" [(ngModel)]="appointmentRequest.additionalInfo"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="serviceLocation">Lieu du service</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="atShop" name="serviceLocation" value="shop" [(ngModel)]="appointmentRequest.serviceLocation">
+              <label for="atShop">À l'atelier</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="atHome" name="serviceLocation" value="home" [(ngModel)]="appointmentRequest.serviceLocation">
+              <label for="atHome">À domicile (+50% d'économie)</label>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn-submit">Demander un rendez-vous</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="testimonials">
+    <h2>Ce que disent nos clients</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Service exceptionnel ! Le mécanicien est venu directement chez moi et a réparé ma voiture en moins de 2 heures. J'ai économisé du temps et de l'argent."</p>
+        <p class="author">- Ahmed K.</p>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Très pratique de ne pas avoir à se déplacer. Le service était professionnel et le prix bien inférieur à ce que je paie habituellement."</p>
+        <p class="author">- Sophie M.</p>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★☆</div>
+        <p class="quote">"J'étais sceptique au début, mais le service à domicile est vraiment pratique. Le mécanicien était compétent et a tout expliqué clairement."</p>
+        <p class="author">- Karim B.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Choose Us Section -->
+  <div class="why-choose-us">
+    <h2>Pourquoi choisir notre atelier mécanique?</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🔧</div>
+        <h3>Techniciens certifiés</h3>
+        <p>Nos mécaniciens sont tous certifiés et formés régulièrement aux dernières technologies.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⏱️</div>
+        <h3>Service rapide</h3>
+        <p>Nous respectons votre temps et nous efforçons de terminer les réparations dans les délais convenus.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <h3>Prix transparents</h3>
+        <p>Pas de surprises! Nous vous fournissons des devis détaillés avant de commencer tout travail.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <h3>Garantie sur les réparations</h3>
+        <p>Toutes nos réparations sont garanties pour votre tranquillité d'esprit.</p>
+      </div>
+    </div>
+  </div>
+</div>

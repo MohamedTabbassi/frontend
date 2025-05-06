@@ -27,6 +27,7 @@ export class MecaniqueComponent implements OnInit {
     customerName: "",
     contactNumber: "",
     additionalInfo: "",
+    serviceLocation: "shop", // Default to shop, can be 'shop' or 'home'
   }
 
   // Service categories
@@ -38,6 +39,7 @@ export class MecaniqueComponent implements OnInit {
     { id: "brakes", name: "Freins" },
     { id: "engine", name: "Moteur" },
     { id: "electrical", name: "Système électrique" },
+    { id: "mobile", name: "Service à domicile" }, // Added mobile mechanic category
   ]
 
   // Filter
@@ -87,8 +89,10 @@ export class MecaniqueComponent implements OnInit {
 
   bookAppointment(): void {
     // Here you would implement the API call to book an appointment
-    alert("Demande de rendez-vous envoyée! Nous vous contacterons pour confirmer.")
+    const locationText = this.appointmentRequest.serviceLocation === "home" ? "à domicile" : "à l'atelier"
+    alert(`Demande de rendez-vous ${locationText} envoyée! Nous vous contacterons pour confirmer.`)
     console.log("Appointment request:", this.appointmentRequest)
+
     // Reset form
     this.appointmentRequest = {
       serviceType: "",
@@ -100,6 +104,14 @@ export class MecaniqueComponent implements OnInit {
       customerName: "",
       contactNumber: "",
       additionalInfo: "",
+      serviceLocation: "shop",
     }
+  }
+
+  // Method to book mobile service
+  bookMobileService(serviceName: string): void {
+    alert(
+      `Vous avez demandé le service mobile: ${serviceName}. Un conseiller vous contactera pour confirmer les détails.`,
+    )
   }
 }

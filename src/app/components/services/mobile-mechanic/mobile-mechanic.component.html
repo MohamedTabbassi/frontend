@@ -1,0 +1,189 @@
+<p>mobile-mechanic works!</p>
+<div class="mobile-mechanic-container">
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="experience-badge">
+            <span class="years">25</span>
+            <span class="text">ANS<br>D'EXPÉRIENCE</span>
+          </div>
+          <h1>Atelier Mobile à Votre Porte</h1>
+          <div class="hero-tagline">
+            <span class="pay">Payez</span>
+            <span class="discount">50% Moins</span>
+            <span class="on-your">sur votre</span>
+            <span class="service">Service Auto*</span>
+          </div>
+          <p class="tagline-secondary">Plus Rapide, Plus Intelligent, Plus Pratique.</p>
+          <p class="disclaimer">*50% moins cher que les centres de service traditionnels</p>
+          <button class="btn-book-mobile" (click)="scrollToServices()">VOIR NOS SERVICES</button>
+        </div>
+        <div class="hero-image">
+          <img src="https://via.placeholder.com/600x400/ff6b00/ffffff?text=Atelier+Mobile" alt="Mécanicien à domicile">
+        </div>
+      </div>
+    </div>
+  
+    <div class="benefits-section">
+      <div class="benefit-card">
+        <div class="benefit-icon">🔧</div>
+        <h3>Atelier sur Roues</h3>
+        <p>Notre atelier mobile vient directement à votre domicile ou lieu de travail.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h3>50% Moins Cher</h3>
+        <p>Économisez jusqu'à 50% par rapport aux centres de service traditionnels.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⏱️</div>
+        <h3>Service Rapide</h3>
+        <p>Pas de temps d'attente, nous intervenons à l'heure qui vous convient.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🛡️</div>
+        <h3>Service à Domicile</h3>
+        <p>Restez chez vous pendant que nous nous occupons de votre véhicule.</p>
+      </div>
+    </div>
+  
+    <div class="how-it-works">
+      <h2>Comment ça fonctionne</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Réservez</h3>
+          <p>Réservez un service en ligne ou par téléphone</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Nous venons à vous</h3>
+          <p>Notre mécanicien vient à votre domicile ou lieu de travail</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Service effectué</h3>
+          <p>Votre véhicule est réparé sur place sans déplacement</p>
+        </div>
+      </div>
+    </div>
+  
+    <div id="services" class="services-section">
+      <h2>Nos Services à Domicile</h2>
+      <div class="services-grid">
+        <div *ngFor="let service of mobileServices" class="service-card">
+          <img [src]="service.image" [alt]="service.name">
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.description }}</p>
+          <p class="price">
+            <span class="original">{{ service.originalPrice }}€</span>
+            <span class="discounted">{{ service.discountedPrice }}€</span>
+          </p>
+          <button class="btn-book" (click)="bookService(service.id)">Réserver</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="booking-section">
+      <h2>Réserver un Service à Domicile</h2>
+      <div class="booking-form">
+        <form (ngSubmit)="submitBooking()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="service">Service souhaité</label>
+              <select id="service" name="service" [(ngModel)]="bookingRequest.service" required>
+                <option value="">Sélectionnez un service</option>
+                <option *ngFor="let service of mobileServices" [value]="service.name">
+                  {{ service.name }} ({{ service.discountedPrice }}€)
+                </option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nom complet</label>
+              <input type="text" id="name" name="name" [(ngModel)]="bookingRequest.name" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <input type="tel" id="phone" name="phone" [(ngModel)]="bookingRequest.phone" required>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" [(ngModel)]="bookingRequest.email" required>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="address">Adresse complète</label>
+            <input type="text" id="address" name="address" [(ngModel)]="bookingRequest.address" required>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Date souhaitée</label>
+              <input type="date" id="date" name="date" [(ngModel)]="bookingRequest.date" required>
+            </div>
+            <div class="form-group">
+              <label for="time">Heure souhaitée</label>
+              <input type="time" id="time" name="time" [(ngModel)]="bookingRequest.time" required>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vehicleMake">Marque du véhicule</label>
+              <input type="text" id="vehicleMake" name="vehicleMake" [(ngModel)]="bookingRequest.vehicleMake" required>
+            </div>
+            <div class="form-group">
+              <label for="vehicleModel">Modèle</label>
+              <input type="text" id="vehicleModel" name="vehicleModel" [(ngModel)]="bookingRequest.vehicleModel" required>
+            </div>
+            <div class="form-group">
+              <label for="vehicleYear">Année</label>
+              <input type="text" id="vehicleYear" name="vehicleYear" [(ngModel)]="bookingRequest.vehicleYear" required>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="notes">Informations supplémentaires</label>
+            <textarea id="notes" name="notes" [(ngModel)]="bookingRequest.notes"></textarea>
+          </div>
+  
+          <button type="submit" class="btn-submit">Réserver maintenant</button>
+        </form>
+      </div>
+    </div>
+  
+    <div class="testimonials">
+      <h2>Ce que disent nos clients</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Service exceptionnel ! Le mécanicien est venu directement chez moi et a réparé ma voiture en moins de 2 heures. J'ai économisé du temps et de l'argent."</p>
+          <p class="author">- Ahmed K.</p>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Très pratique de ne pas avoir à se déplacer. Le service était professionnel et le prix bien inférieur à ce que je paie habituellement."</p>
+          <p class="author">- Sophie M.</p>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★☆</div>
+          <p class="quote">"J'étais sceptique au début, mais le service à domicile est vraiment pratique. Le mécanicien était compétent et a tout expliqué clairement."</p>
+          <p class="author">- Karim B.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="cta-section">
+      <h2>Prêt à économiser du temps et de l'argent?</h2>
+      <p>Réservez un service à domicile dès aujourd'hui et bénéficiez de 50% d'économie!</p>
+      <button class="btn-cta" (click)="scrollToBooking()">RÉSERVER MAINTENANT</button>
+    </div>
+  </div>
+  

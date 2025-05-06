@@ -1,111 +1,184 @@
-<div class="service-container">
-    <div class="service-header">
-      <h1>Pièces Automobiles</h1>
-      <p>Trouvez toutes les pièces dont vous avez besoin pour votre véhicule</p>
-    </div>
-  
-    <!-- Search and Filter Section -->
-    <div class="search-filter-section">
-      <div class="search-box">
-        <input 
-          type="text" 
-          [(ngModel)]="searchQuery" 
-          placeholder="Rechercher une pièce..." 
-          (keyup.enter)="searchParts()">
-        <button (click)="searchParts()">Rechercher</button>
-      </div>
-      
-      <div class="category-filter">
-        <h3>Filtrer par catégorie</h3>
-        <div class="filter-buttons">
-          <button 
-            [class.active]="selectedCategory === ''" 
-            (click)="filterByCategory('')">
-            Tous
-          </button>
-          <button 
-            *ngFor="let category of partCategories" 
-            [class.active]="selectedCategory === category.id" 
-            (click)="filterByCategory(category.id)">
-            {{ category.name }}
-          </button>
+<div class="autopart-container">
+  <!-- Header with contact info -->
+  <div class="top-header">
+    <div class="container">
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fa fa-map-marker"></i>
+          <span>Route ceinture Megrine Jawhra, Ben Arous, Tunisie</span>
+        </div>
+        <div class="contact-item">
+          <i class="fa fa-phone"></i>
+          <span>+216 23 136 136</span>
+        </div>
+        <div class="contact-item">
+          <i class="fa fa-clock-o"></i>
+          <span>Lun-ven 8h30-17h</span>
+        </div>
+        <div class="contact-item">
+          <i class="fa fa-envelope"></i>
+          <span>autopart.tunisiacom</span>
         </div>
       </div>
-    </div>
-  
-    <!-- Loading and Error States -->
-    <div *ngIf="loading" class="loading-spinner">
-      Chargement des pièces...
-    </div>
-    
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
-  
-    <!-- Parts List -->
-    <div *ngIf="!loading && !error" class="parts-list">
-      <h2>Catalogue de pièces</h2>
-      
-      <div *ngIf="autoParts.length === 0" class="no-parts">
-        Aucune pièce disponible pour le moment.
-      </div>
-      
-      <div class="parts-grid">
-        <div *ngFor="let part of autoParts" class="part-card">
-          <div class="part-image" *ngIf="part.imageUrl">
-            <img [src]="part.imageUrl" [alt]="part.name">
-          </div>
-          <div class="part-details">
-            <h3>{{ part.name }}</h3>
-            <p class="part-reference">Réf: {{ part.reference || 'N/A' }}</p>
-            <p class="part-compatibility">Compatible: {{ part.compatibility || 'Universel' }}</p>
-            <p class="part-description">{{ part.description }}</p>
-            <p class="part-price">{{ part.price | currency:'EUR' }}</p>
-            <p class="part-stock" [class.in-stock]="part.inStock" [class.out-of-stock]="!part.inStock">
-              {{ part.inStock ? 'En stock' : 'Rupture de stock' }}
-            </p>
-            <button 
-              class="btn-add-to-cart" 
-              [disabled]="!part.inStock"
-              (click)="addToCart(part)">
-              Ajouter au panier
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Shopping Cart Summary -->
-    <div class="cart-summary" *ngIf="cart.length > 0">
-      <h2>Votre panier ({{ cart.length }} article{{ cart.length > 1 ? 's' : '' }})</h2>
-      <ul class="cart-items">
-        <li *ngFor="let item of cart">
-          {{ item.name }} - {{ item.price | currency:'EUR' }}
-        </li>
-      </ul>
-      
-  
-    <!-- Additional Information -->
-    <div class="info-section">
-      <h2>Informations sur nos pièces</h2>
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>Qualité garantie</h3>
-          <p>Toutes nos pièces sont de qualité d'origine ou équivalente, avec une garantie de 12 mois minimum.</p>
-        </div>
-        <div class="info-card">
-          <h3>Livraison rapide</h3>
-          <p>Livraison en 24-48h pour les pièces en stock, et 3-5 jours pour les commandes spéciales.</p>
-        </div>
-        <div class="info-card">
-          <h3>Assistance technique</h3>
-          <p>Notre équipe de techniciens est disponible pour vous aider à choisir les bonnes pièces pour votre véhicule.</p>
-        </div>
-        <div class="info-card">
-          <h3>Retours faciles</h3>
-          <p>Retours acceptés sous 14 jours pour les pièces non utilisées dans leur emballage d'origine.</p>
-        </div>
+      <div class="account-links">
+        <a href="#" class="account-link">Accueil</a>
+        <a href="#" class="account-link">Contact</a>
+        <a href="#" class="account-link account-btn">
+          <i class="fa fa-user"></i> Mon Compte
+        </a>
       </div>
     </div>
   </div>
+
+  <!-- Main header with logo and search -->
+  <div class="main-header">
+    <div class="container">
+      <div class="logo">
+        <h1>AUTO<span>PART</span></h1>
+      </div>
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          placeholder="Recherche par référence" 
+          (keyup.enter)="searchParts()">
+        <button (click)="searchParts()">RECHERCHER</button>
+      </div>
+      <div class="cart-icon">
+        <a href="#" class="cart-link">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation menu -->
+  <div class="nav-menu">
+    <div class="container">
+      <div class="dropdown">
+        <button class="dropdown-btn">Catalogue pièces auto <i class="fa fa-angle-down"></i></button>
+        <div class="dropdown-content">
+          <div class="dropdown-grid">
+            <div *ngFor="let category of partCategories" class="dropdown-item">
+              <a href="#" (click)="filterByCategory(category.id); $event.preventDefault()">
+                {{ category.name }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="nav-link">Mes véhicules</a>
+    </div>
+  </div>
+
+  <!-- Hero banner with vehicle selector -->
+  <div class="hero-banner">
+    <div class="container">
+      <div class="vehicle-selector">
+        <h2>SÉLECTIONNEZ VOTRE VÉHICULE</h2>
+        <div class="selector-form">
+          <div class="selector-group">
+            <select [(ngModel)]="selectedManufacturer" class="form-control">
+              <option value="">Constructeurs</option>
+              <option *ngFor="let manufacturer of manufacturers" [value]="manufacturer.id">{{ manufacturer.name }}</option>
+            </select>
+          </div>
+          <div class="selector-group">
+            <select [(ngModel)]="selectedModel" class="form-control" [disabled]="!selectedManufacturer">
+              <option value="">Modèles</option>
+              <option *ngFor="let model of getFilteredModels()" [value]="model.id">{{ model.name }}</option>
+            </select>
+          </div>
+          <div class="selector-group">
+            <select [(ngModel)]="selectedEngine" class="form-control" [disabled]="!selectedModel">
+              <option value="">Motorisations</option>
+              <option *ngFor="let engine of getFilteredEngines()" [value]="engine.id">{{ engine.name }}</option>
+            </select>
+          </div>
+          <button class="search-btn" (click)="searchByVehicle()">RECHERCHER</button>
+        </div>
+      </div>
+      <div class="hero-content">
+        <h1>Vos pièces auto sur <span>Autopart.tn</span></h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Chargement des pièces...</p>
+  </div>
   
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Parts Categories -->
+  <div class="container">
+    <h2 class="section-title">Catalogue pièces automobiles</h2>
+    
+    <div class="categories-grid">
+      <div *ngFor="let category of partCategories" class="category-card" (click)="filterByCategory(category.id)">
+        <div class="category-image">
+          <img [src]="category.icon" [alt]="category.name">
+        </div>
+        <div class="category-name">{{ category.name }}</div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Change this line: -->
+<h2>{{ getCategoryName() }}</h2>
+
+<!-- Change this button: -->
+<button class="reset-btn" *ngIf="selectedCategory" (click)="resetCategory()">
+
+<!-- Change this heading: -->
+<h2>Votre panier ({{ getCartCountText() }})</h2>
+
+<!-- Change this total display: -->
+<p>Total: {{ getCartTotal() | currency:'EUR' }}</p>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-column">
+          <h3>À propos</h3>
+          <p>AutoPart est votre spécialiste en pièces détachées automobiles en Tunisie. Nous proposons une large gamme de pièces de qualité pour toutes les marques.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Catégories</h3>
+          <ul>
+            <li><a href="#">Filtres</a></li>
+            <li><a href="#">Freinage</a></li>
+            <li><a href="#">Suspension</a></li>
+            <li><a href="#">Moteur</a></li>
+            <li><a href="#">Éclairage</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Informations</h3>
+          <ul>
+            <li><a href="#">Conditions générales</a></li>
+            <li><a href="#">Livraison</a></li>
+            <li><a href="#">Paiement</a></li>
+            <li><a href="#">Retours</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <p><i class="fa fa-map-marker"></i> Route ceinture Megrine Jawhra, Ben Arous, Tunisie</p>
+          <p><i class="fa fa-phone"></i> +216 23 136 136</p>
+          <p><i class="fa fa-envelope"></i> autopart.tunisia.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 AutoPart. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
