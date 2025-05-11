@@ -125,7 +125,7 @@ export class LocationComponent implements OnInit {
       fuelType: "Essence",
       pricePerDay: 20,
       features: ["Climatisation", "Radio"],
-      imageUrl: "https://via.placeholder.com/300x200/ffffff/333333?text=Fiat+Panda",
+      imageUrl: "https://www.google.com/search?q=fiat+panda&sca_esv=b5b85f1110a5fb0d&rlz=1C1GCEU_frTN1160TN1160&udm=2&biw=1536&bih=730&sxsrf=AHTn8zqYVT9__Q7eXVsKdWKN5hEJDcfHRQ%3A1746647518570&ei=3rkbaLnIItKokdUPm-PE-A0&oq=fiat+pan&gs_lp=EgNpbWciCGZpYXQgcGFuKgIIADIIEAAYgAQYsQMyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgARIgjhQtQlYlS5wBHgAkAEAmAHBAaAB1AqqAQQwLjEwuAEByAEA-AEBmAIOoALWC6gCBsICChAAGIAEGEMYigXCAgYQABgHGB7CAgoQIxgnGMkCGOoCwgILEAAYgAQYsQMYgwHCAgcQIxgnGMkCwgIOEAAYgAQYsQMYgwEYigXCAgcQABiABBgKwgIKEAAYgAQYsQMYCpgDCYgGAZIHBTQuOS4xoAfCM7IHBTAuOS4xuAerCw&sclient=img#vhid=fLre8lmnQQ-74M&vssid=mosaic",
       isNew: false,
       hasAC: true,
       luggage: 2,

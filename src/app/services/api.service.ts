@@ -11,6 +11,14 @@ export class ApiService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
+  private getHeaders(): HttpHeaders {
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      // Add any other headers as needed, e.g., authorization token
+    })
+    return headers
+  }
+
 
   /**
    * Get request

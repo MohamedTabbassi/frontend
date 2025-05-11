@@ -8,7 +8,7 @@ import  { Router } from "@angular/router"
   providedIn: "root",
 })
 export class AuthService {
-  private apiUrl = "http://localhost:5000" // Replace with your API URL
+  private apiUrl = "http://localhost:5000" 
   private currentUserSubject: BehaviorSubject<any>
   public currentUser$: Observable<any>
   private isAuthenticatedSubject: BehaviorSubject<boolean>
